@@ -78,7 +78,7 @@ details.how summary{cursor:pointer;font-weight:800;color:#fff}
 .pill2.gold{color:var(--gold)}
 .fire{color:#ff9a3d}
 .tag{border-radius:999px;padding:5px 12px;font-size:12px;font-weight:900;background:rgba(255,255,255,.12)}
-.t-U{background:#7b4dff}.t-A{background:#e5304c}.t-K{background:#1f8fff}.t-D{background:#0fb07a}.t-M{background:#a14bd6}.t-T{background:#ff8a1f}.t-G{background:#3b4bd8}.t-Y{background:#e0347e}.t-X{background:#7b4dff}
+.t-U{background:#7b4dff}.t-A{background:#e5304c}.t-K{background:#1f8fff}.t-D{background:#0fb07a}.t-M{background:#a14bd6}.t-T{background:#ff8a1f}.t-G{background:#3b4bd8}.t-Y{background:#e0347e}.t-X{background:#7b4dff}.t-I{background:#0f9a6e}.t-S{background:#c2410c}.t-R{background:#9333ea}.t-W{background:#b8860b}
 .qcard{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:24px;padding:18px 16px 18px;margin-bottom:14px;min-height:120px;display:flex;align-items:center;gap:12px}
 .qtext{font-size:21px;font-weight:900;line-height:1.3;flex:1}
 .ringbox{position:relative;width:54px;height:54px;flex:0 0 54px;align-self:flex-start}
@@ -487,13 +487,133 @@ const Q=[
 {p:"G",q:"Patatesin anavatanı neresidir?",o:["Güney Amerika","Hindistan","İrlanda","Orta Asya"],e:"Patates And Dağları'ndan Avrupa'ya 16. yüzyılda getirildi."},
 
 // ================= SÜRPRİZ =================
-{p:"X",q:"Uşak'ın Karahallı ilçesine bağlı Külköy'de, sahibi şehir dışına gittiğinde tavuklara bakmak için en uygun kişi kimdir?",o:["Uygun","Cennet","Şanize","Kaymak Emin"],e:"Cevap sorunun içindeydi: en UYGUN kişi tabii ki Uygun! 🐔😄"}
+{p:"X",q:"Uşak'ın Karahallı ilçesine bağlı Külköy'de, sahibi şehir dışına gittiğinde tavuklara bakmak için en uygun kişi kimdir?",o:["Uygun","Cennet","Şanize","Kaymak Emin"],e:"Cevap sorunun içindeydi: en UYGUN kişi tabii ki Uygun! 🐔😄"},
+// ================= UŞAK EK (tarhana, Blaundos, Karahallı) =================
+{p:"U",q:"Coğrafi işaretli Uşak tarhanası, tescil şartlarına göre en az kaç gün fermente edilir?",o:["21 gün","3 gün","7 gün","60 gün"],e:"En az 21 günlük fermantasyon ve bol kırmızı biber, Uşak tarhanasını diğer tarhanalardan ayırır; 2017'de menşe adıyla tescillendi."},
+{p:"U",q:"Ulubey'deki Blaundos Antik Kenti'ne neden 'garnizon kenti' denir?",o:["Büyük İskender'in seferinde Makedon askerleri yerleştirildiği için","Roma'nın en büyük cephaneliği olduğu için","Lidya kralının sarayı olduğu için","Bizans donanmasının üssü olduğu için"],e:"Blaundos'a Büyük İskender'in Anadolu seferi sırasında Makedon askerleri yerleştirildi; kanyonla çevrili olup tek girişi olduğu için doğal bir kale gibidir."},
+{p:"U",q:"Karahallı'nın coğrafi işaret tescilli lezzeti hangisidir?",o:["Karahallı Ciğeri","Karahallı Köftesi","Karahallı Böreği","Karahallı Helvası"],e:"Karahallı Ciğeri 2022'de coğrafi işaret olarak tescil edildi."},
+{p:"U",q:"Uşak'ın nüfus ve yüzölçümü bakımından en küçük ilçesi hangisidir?",o:["Karahallı","Ulubey","Sivaslı","Banaz"],e:"Karahallı, Uşak'ın hem en az nüfuslu hem de en küçük yüzölçümlü ilçesidir."},
+{p:"U",q:"Karahallı düşman işgalinden hangi tarihte kurtuldu?",o:["2 Eylül 1922","1 Eylül 1922","30 Ağustos 1922","9 Eylül 1922"],e:"28 Ağustos 1920'de işgal edilen Karahallı, Uşak merkezden bir gün sonra, 2 Eylül 1922'de kurtuldu."},
+{p:"U",q:"Karahallı'nın doğu ve güneyinde hangi il ile sınır vardır?",o:["Denizli","Afyonkarahisar","Kütahya","Manisa"],e:"Karahallı'nın doğusunda Denizli Çivril, güneyinde Denizli Bekilli ilçeleri bulunur."},
+
+// ================= DİNİ BİLGİLER (25) =================
+{p:"I",q:"Kur'an-ı Kerim'de adı geçen tek kadın kimdir?",o:["Hz. Meryem","Hz. Hatice","Hz. Ayşe","Hz. Fatıma"],e:"Hz. Meryem'in adı Kur'an'da defalarca geçer ve bir sure de onun adını taşır."},
+{p:"I",q:"Besmele ile başlamayan tek sure hangisidir?",o:["Tevbe","Fatiha","Yasin","İhlas"],e:"Tevbe Suresi, besmelesiz başlayan tek suredir."},
+{p:"I",q:"Kur'an'ın en kısa suresi hangisidir?",o:["Kevser","İhlas","Asr","Nas"],e:"Kevser Suresi 3 ayetle en kısa suredir."},
+{p:"I",q:"İlk inen ayetler hangi surede yer alır?",o:["Alak","Fatiha","Bakara","Müddessir"],e:"Hira Mağarası'nda inen ilk ayetler 'Oku!' emriyle başlayan Alak Suresi'ndedir."},
+{p:"I",q:"'Kur'an'ın kalbi' olarak anılan sure hangisidir?",o:["Yasin","Mülk","Rahman","Kehf"],e:"Bir hadiste Yasin Suresi Kur'an'ın kalbi olarak nitelenir."},
+{p:"I",q:"Ayetü'l-Kürsi hangi surenin içindedir?",o:["Bakara","Al-i İmran","Nisa","Yasin"],e:"Ayetü'l-Kürsi, Bakara Suresi'nin 255. ayetidir."},
+{p:"I",q:"Kur'an'da adı geçen peygamber sayısı kaçtır?",o:["25","12","40","124"],e:"Kur'an'da 25 peygamberin adı geçer."},
+{p:"I",q:"Zebur hangi peygambere indirilmiştir?",o:["Hz. Davud","Hz. Musa","Hz. İsa","Hz. Süleyman"],e:"Tevrat Hz. Musa'ya, Zebur Hz. Davud'a, İncil Hz. İsa'ya indirilmiştir."},
+{p:"I",q:"Peygamber Efendimizin doğduğu yıl hangi adla anılır?",o:["Fil Yılı","Hüzün Yılı","Heyetler Yılı","Bereket Yılı"],e:"Ebrehe'nin fillerle Kâbe'ye saldırdığı yıl olan 571, 'Fil Yılı' diye anılır."},
+{p:"I",q:"Peygamber Efendimizin süt annesi kimdir?",o:["Halime","Amine","Ümmü Eymen","Süveybe"],e:"Peygamberimiz çocukluğunda Benî Sa'd kabilesinden Halime'nin yanında büyüdü. Annesi Hz. Amine'dir."},
+{p:"I",q:"İslam tarihinde ilk müezzin kimdir?",o:["Hz. Bilal-i Habeşi","Hz. Ali","Abdullah bin Ümmü Mektum","Hz. Ömer"],e:"Güzel sesiyle bilinen Hz. Bilal, ilk ezanı okuyan sahabidir."},
+{p:"I",q:"İslam'ın ilk şehidi kimdir?",o:["Hz. Sümeyye","Hz. Hamza","Hz. Yasir","Hz. Mus'ab bin Umeyr"],e:"Ammar bin Yasir'in annesi Hz. Sümeyye, inancından dolayı şehit edilen ilk Müslümandır."},
+{p:"I",q:"Hicret hangi yıl gerçekleşti?",o:["622","610","630","632"],e:"Mekke'den Medine'ye hicret 622'de oldu ve Hicri takvimin başlangıcı kabul edildi."},
+{p:"I",q:"Hicri takvimi resmen başlatan halife kimdir?",o:["Hz. Ömer","Hz. Ebubekir","Hz. Osman","Hz. Ali"],e:"Hz. Ömer döneminde hicret yılı takvimin başlangıcı olarak belirlendi."},
+{p:"I",q:"'Hak ile batılı ayıran' anlamına gelen 'Faruk' lakabı hangi sahabeye aittir?",o:["Hz. Ömer","Hz. Ebubekir","Hz. Osman","Hz. Ali"],e:"Hz. Ebubekir 'Sıddık', Hz. Ömer 'Faruk', Hz. Osman 'Zinnureyn' lakabıyla anılır."},
+{p:"I",q:"Kur'an'ı ilk kez kitap (mushaf) haline getiren halife kimdir?",o:["Hz. Ebubekir","Hz. Osman","Hz. Ömer","Hz. Ali"],e:"Kur'an Hz. Ebubekir döneminde mushaf haline getirildi; Hz. Osman döneminde çoğaltılıp merkezlere gönderildi."},
+{p:"I",q:"Kur'an nüshalarını çoğaltarak İslam şehirlerine gönderen halife kimdir?",o:["Hz. Osman","Hz. Ebubekir","Hz. Ömer","Muaviye"],e:"Hz. Osman, mushafı çoğaltıp başlıca şehirlere gönderdi."},
+{p:"I",q:"Bedir Savaşı hangi yıl yapıldı?",o:["624","622","625","627"],e:"Bedir Savaşı Hicri 2. yılda, 624'te yapıldı. Uhud 625, Hendek 627'dedir."},
+{p:"I",q:"Uhud Savaşı'nda okçuların yerleştirildiği tepe hangisidir?",o:["Ayneyn (Okçular) Tepesi","Safa Tepesi","Arafat Dağı","Nur Dağı"],e:"Okçuların Ayneyn Tepesi'ni bırakması Uhud'un seyrini değiştirdi."},
+{p:"I",q:"Hendek Savaşı'nda Medine'nin etrafına hendek kazılmasını öneren sahabi kimdir?",o:["Selman-ı Farisi","Halid bin Velid","Sa'd bin Ebi Vakkas","Zeyd bin Harise"],e:"İranlı sahabi Selman-ı Farisi'nin önerisiyle hendek kazıldı."},
+{p:"I",q:"'Allah'ın kılıcı' anlamında 'Seyfullah' lakabıyla bilinen komutan kimdir?",o:["Halid bin Velid","Hz. Hamza","Ebu Ubeyde","Amr bin As"],e:"Halid bin Velid, askeri dehası nedeniyle 'Seyfullah' lakabıyla anılır."},
+{p:"I",q:"'Seyyidü'ş-şüheda' (şehitlerin efendisi) olarak anılan sahabi kimdir?",o:["Hz. Hamza","Hz. Ali","Hz. Hüseyin","Hz. Talha"],e:"Peygamberimizin amcası Hz. Hamza, Uhud'da şehit düşmüştür."},
+{p:"I",q:"Müslümanların ilk kıblesi neresidir?",o:["Mescid-i Aksa (Kudüs)","Kâbe (Mekke)","Mescid-i Nebevi (Medine)","Kuba Mescidi"],e:"Kıble, Hicret'ten yaklaşık 16-17 ay sonra Kudüs'ten Kâbe'ye çevrildi."},
+{p:"I",q:"Kâbe'yi yeniden inşa eden baba ve oğul peygamberler kimlerdir?",o:["Hz. İbrahim ve Hz. İsmail","Hz. Yakub ve Hz. Yusuf","Hz. Davud ve Hz. Süleyman","Hz. Zekeriya ve Hz. Yahya"],e:"Kur'an'a göre Kâbe'nin temellerini Hz. İbrahim ve oğlu Hz. İsmail yükseltti."},
+{p:"I",q:"Veda Hutbesi nerede irat edilmiştir?",o:["Arafat","Medine","Taif","Uhud"],e:"Peygamberimiz Veda Haccı sırasında Veda Hutbesi'ni Arafat'ta okudu."},
+
+// ================= TÜRK SİNEMASI (20) =================
+{p:"S",q:"Hababam Sınıfı'nda Mahmut Hoca'yı kim canlandırdı?",o:["Münir Özkul","Adile Naşit","Şener Şen","Tarık Akan"],e:"Münir Özkul'un Mahmut Hoca'sı Türk sinemasının en sevilen öğretmen karakteridir."},
+{p:"S",q:"Hababam Sınıfı hangi yazarın eserinden uyarlanmıştır?",o:["Rıfat Ilgaz","Aziz Nesin","Haldun Taner","Sait Faik"],e:"Rıfat Ilgaz'ın romanından uyarlanan seri 1975'te sinemaya geldi."},
+{p:"S",q:"Hababam Sınıfı'nın geçtiği okulun adı nedir?",o:["Özel Çamlıca Lisesi","Galatasaray Lisesi","Kabataş Erkek Lisesi","Özel Boğaziçi Lisesi"],e:"Hababam Sınıfı'nın öğrencileri Özel Çamlıca Lisesi'nde okur."},
+{p:"S",q:"Hababam Sınıfı'nda 'Güdük Necmi'yi kim oynadı?",o:["Halit Akçatepe","Kemal Sunal","Cem Gürdap","Tarık Akan"],e:"Güdük Necmi'yi Halit Akçatepe, İnek Şaban'ı Kemal Sunal, Damat Ferit'i Tarık Akan oynadı."},
+{p:"S",q:"'Yeşilçam'ın Sultanı' olarak anılan oyuncu kimdir?",o:["Türkan Şoray","Hülya Koçyiğit","Fatma Girik","Filiz Akın"],e:"Türkan Şoray 'Sultan' lakabıyla anılır."},
+{p:"S",q:"'Çirkin Kral' lakabıyla bilinen yönetmen-oyuncu kimdir?",o:["Yılmaz Güney","Cüneyt Arkın","Kadir İnanır","Ayhan Işık"],e:"Yılmaz Güney 'Çirkin Kral' diye anılır. Ayhan Işık ise 'Kral' lakabıyla bilinir."},
+{p:"S",q:"Berlin'de Altın Ayı kazanan ilk Türk filmi hangisidir?",o:["Susuz Yaz","Yol","Sürü","Umut"],e:"Metin Erksan'ın Susuz Yaz filmi 1964'te Altın Ayı'yı kazandı."},
+{p:"S",q:"1982'de Cannes'da Altın Palmiye kazanan Türk filmi hangisidir?",o:["Yol","Sürü","Duvar","Kış Uykusu"],e:"Senaryosu Yılmaz Güney'e ait Yol, 1982'de Altın Palmiye'yi paylaştı."},
+{p:"S",q:"Nuri Bilge Ceylan'a 2014'te Altın Palmiye kazandıran film hangisidir?",o:["Kış Uykusu","Üç Maymun","Ahlat Ağacı","Uzak"],e:"Kış Uykusu 2014 Cannes Film Festivali'nde Altın Palmiye aldı."},
+{p:"S",q:"2011'de Cannes'da Büyük Ödül'ü kazanan 'Bir Zamanlar Anadolu'da' filminin yönetmeni kimdir?",o:["Nuri Bilge Ceylan","Zeki Demirkubuz","Semih Kaplanoğlu","Fatih Akın"],e:"Film, 2011 Cannes'da Jüri Büyük Ödülü'nü aldı."},
+{p:"S",q:"'Selvi Boylum Al Yazmalım' hangi yazarın eserinden uyarlanmıştır?",o:["Cengiz Aytmatov","Yaşar Kemal","Orhan Kemal","Sabahattin Ali"],e:"Atıf Yılmaz'ın filmi, Kırgız yazar Cengiz Aytmatov'un hikâyesinden uyarlandı."},
+{p:"S",q:"'Eşkıya' filminde Baran karakterini kim canlandırdı?",o:["Şener Şen","Uğur Yücel","Kadir İnanır","Tarık Akan"],e:"Yavuz Turgut'un 1996 yapımı Eşkıya'sında Baran'ı Şener Şen oynadı."},
+{p:"S",q:"'Babam ve Oğlum' filminin yönetmeni kimdir?",o:["Çağan Irmak","Yılmaz Erdoğan","Ömer Faruk Sorak","Cem Yılmaz"],e:"Babam ve Oğlum, Çağan Irmak'ın 2005 yapımı filmidir."},
+{p:"S",q:"'Vizontele' filmi hangi ilimizde geçer?",o:["Hakkari","Van","Mardin","Kars"],e:"Film, televizyonun Hakkari'de küçük bir kasabaya gelişini anlatır."},
+{p:"S",q:"'Neşeli Günler'de kavgalı karı-kocayı canlandıran ikili kimdir?",o:["Adile Naşit ve Münir Özkul","Ayşen Gruda ve Şener Şen","Perran Kutman ve Erol Günaydın","Gülşen Bubikoğlu ve Kemal Sunal"],e:"Adile Naşit ve Münir Özkul, rakip pastane işleten küs bir çifti oynadı."},
+{p:"S",q:"Yeşilçam'da 'Tarkan' karakterini canlandıran oyuncu kimdir?",o:["Kartal Tibet","Cüneyt Arkın","Ediz Hun","Kadir İnanır"],e:"Kartal Tibet, Sezgin Burak'ın çizgi romanı Tarkan'ı sinemada canlandırdı."},
+{p:"S",q:"'Malkoçoğlu' serisinin başrol oyuncusu kimdir?",o:["Cüneyt Arkın","Kartal Tibet","Serdar Gökhan","İzzet Günay"],e:"Malkoçoğlu, Cüneyt Arkın'ın en bilinen rollerindendir."},
+{p:"S",q:"Kült bilimkurgu filmi 'Dünyayı Kurtaran Adam'ın başrolünde kim vardır?",o:["Cüneyt Arkın","Kartal Tibet","Kemal Sunal","Yılmaz Köksal"],e:"1982 yapımı film, 'Türk Star Wars'ı' olarak da anılır."},
+{p:"S",q:"'Ayla' filmi hangi savaş sırasında yaşanan gerçek bir hikâyeyi anlatır?",o:["Kore Savaşı","Kıbrıs Harekâtı","Çanakkale Savaşı","II. Dünya Savaşı"],e:"Film, Kore'de Türk askeri Süleyman Dilbirliği ile küçük Ayla'nın hikâyesidir."},
+{p:"S",q:"'G.O.R.A.' filminin yazarı ve başrol oyuncusu kimdir?",o:["Cem Yılmaz","Şahan Gökbakar","Yılmaz Erdoğan","Ata Demirer"],e:"G.O.R.A. (2004), Cem Yılmaz'ın yazıp başrolünde oynadığı bilimkurgu komedisidir."},
+
+// ================= ŞARKI, TÜRKÜ VE İLAHİ (20) =================
+{p:"R",q:"İstiklal Marşı'nın bugün okunan bestesi kime aittir?",o:["Osman Zeki Üngör","Cemal Reşit Rey","Ahmet Adnan Saygun","Ulvi Cemal Erkin"],e:"Sözleri Mehmet Akif Ersoy'a, bugünkü bestesi Osman Zeki Üngör'e aittir."},
+{p:"R",q:"Peygamberimizin doğumunu anlatan Mevlid'i (Vesiletü'n-Necat) kim yazmıştır?",o:["Süleyman Çelebi","Yunus Emre","Fuzuli","Aziz Mahmud Hüdayi"],e:"Süleyman Çelebi'nin 15. yüzyılda yazdığı Mevlid, bugün de mevlit törenlerinde okunur."},
+{p:"R",q:"'Gel Gör Beni Aşk Neyledi' ilahisinin sözleri kime aittir?",o:["Yunus Emre","Hacı Bayram-ı Veli","Pir Sultan Abdal","Kaygusuz Abdal"],e:"Sözleri 13-14. yüzyılda yaşamış Yunus Emre'ye aittir."},
+{p:"R",q:"Bayramlarda okunan meşhur Tekbir'i besteleyen Osmanlı bestecisi kimdir?",o:["Buhurizade Mustafa Itri","Dede Efendi","Hacı Arif Bey","Tanburi Cemil Bey"],e:"Itri'nin bestelediği Tekbir yüzyıllardır bayram namazlarında okunuyor."},
+{p:"R",q:"'Tala'al Bedru Aleyna' ilahisinin hangi olay sırasında okunduğu rivayet edilir?",o:["Peygamberimizin hicretle Medine'ye gelişi","Mekke'nin fethi","Bedir zaferi","Veda Haccı"],e:"Medineliler Peygamberimizi bu ilahiyle karşıladı."},
+{p:"R",q:"'Ceddin Deden' mehter marşının bestecisi kimdir?",o:["Ali Rıza Şengel","Itri","Dede Efendi","Zekâi Dede"],e:"Ceddin Deden, Ali Rıza Şengel'in bestelediği en bilinen mehter marşıdır."},
+{p:"R",q:"'Bozkırın Tezenesi' olarak anılan halk ozanı kimdir?",o:["Neşet Ertaş","Aşık Veysel","Mahzuni Şerif","Âşık Daimi"],e:"Kırşehirli Neşet Ertaş 'Bozkırın Tezenesi' diye anılır."},
+{p:"R",q:"Neşet Ertaş'ın da usta bir halk müzisyeni olan babası kimdir?",o:["Muharrem Ertaş","Hacı Taşan","Çekiç Ali","Aşık Veysel"],e:"Muharrem Ertaş, Kırşehir abdal geleneğinin büyük ustalarındandır."},
+{p:"R",q:"Barış Manço'nun anneannesi için yazdığı şarkı hangisidir?",o:["Gülpembe","Dağlar Dağlar","Domates Biber Patlıcan","Arkadaşım Eşek"],e:"Gülpembe, Barış Manço'nun anneannesine adadığı şarkıdır."},
+{p:"R",q:"Barış Manço'nun sunduğu ünlü çocuk programının adı nedir?",o:["7'den 77'ye","Bizim Ev","Susam Sokağı","Çocuk Saati"],e:"7'den 77'ye, Barış Manço'nun dünyayı gezdiği ünlü TRT programıdır."},
+{p:"R",q:"'Minik Serçe' lakabıyla bilinen şarkıcı kimdir?",o:["Sezen Aksu","Ajda Pekkan","Nilüfer","Sertab Erener"],e:"Sezen Aksu, 'Minik Serçe' lakabıyla anılır."},
+{p:"R",q:"'Süperstar' lakabıyla bilinen şarkıcı kimdir?",o:["Ajda Pekkan","Sezen Aksu","Bülent Ersoy","Hande Yener"],e:"Ajda Pekkan 'Süperstar' diye anılır."},
+{p:"R",q:"'Sanat Güneşi' lakabıyla bilinen sanatçı kimdir?",o:["Zeki Müren","Müzeyyen Senar","Emel Sayın","Muazzez Abacı"],e:"Zeki Müren 'Sanat Güneşi' olarak anılır."},
+{p:"R",q:"Zeki Müren hangi şehirde doğdu?",o:["Bursa","İstanbul","İzmir","Bodrum"],e:"Zeki Müren 1931'de Bursa'da doğdu; son yıllarını Bodrum'da geçirdi."},
+{p:"R",q:"'İmparator' lakabıyla bilinen sanatçı kimdir?",o:["İbrahim Tatlıses","Orhan Gencebay","Ferdi Tayfur","Müslüm Gürses"],e:"İbrahim Tatlıses 'İmparator' diye anılır."},
+{p:"R",q:"'Batsın Bu Dünya' şarkısı hangi sanatçıyla özdeşleşmiştir?",o:["Orhan Gencebay","Müslüm Gürses","Ferdi Tayfur","Hakkı Bulut"],e:"Batsın Bu Dünya, Orhan Gencebay'ın en bilinen eserlerindendir."},
+{p:"R",q:"'Huzurum Kalmadı' şarkısıyla tanınan sanatçı kimdir?",o:["Ferdi Tayfur","Orhan Gencebay","İbrahim Tatlıses","Kibariye"],e:"Huzurum Kalmadı, Ferdi Tayfur'un en ünlü şarkılarındandır."},
+{p:"R",q:"Türkiye'ye 2003'te Eurovision birinciliği getiren şarkı hangisidir?",o:["Everyway That I Can","Şımarık","Dum Tek Tek","Deli"],e:"Sertab Erener, Everyway That I Can ile Letonya'nın başkenti Riga'da birinci oldu."},
+{p:"R",q:"Yurt dışında 'Kiss Kiss' adıyla bilinen Tarkan şarkısı hangisidir?",o:["Şımarık","Şıkıdım","Kuzu Kuzu","Dudu"],e:"Şımarık, dünyada 'Kiss Kiss' şarkısı olarak tanındı."},
+{p:"R",q:"MFÖ grubunun adındaki harfler kimlerin baş harfleridir?",o:["Mazhar, Fuat, Özkan","Mehmet, Ferhat, Ömer","Murat, Fikret, Önder","Mazhar, Ferhat, Özgür"],e:"MFÖ; Mazhar Alanson, Fuat Güner ve Özkan Uğur'dan oluşur."},
+
+// ================= KİM MİLYONER OLMAK İSTER TARZI (40) =================
+{p:"W",q:"Güneş'ten sonra gökyüzünde görülen en parlak yıldız hangisidir?",o:["Sirius","Kutup Yıldızı","Vega","Betelgeuse"],e:"Sirius (Akyıldız), gece gökyüzünün en parlak yıldızıdır."},
+{p:"W",q:"Kutup Yıldızı hangi takımyıldızında yer alır?",o:["Küçükayı","Büyükayı","Avcı","Kraliçe"],e:"Kutup Yıldızı, Küçükayı takımyıldızının kuyruğunun ucundadır."},
+{p:"W",q:"Titan hangi gezegenin uydusudur?",o:["Satürn","Jüpiter","Mars","Neptün"],e:"Titan, Satürn'ün en büyük uydusudur."},
+{p:"W",q:"İnsan vücudundaki en küçük kemik nerededir?",o:["Kulakta","Burunda","Ayak parmağında","El bileğinde"],e:"Orta kulaktaki üzengi kemiği vücudun en küçük kemiğidir."},
+{p:"W",q:"İnsülin hormonunu hangi organ üretir?",o:["Pankreas","Karaciğer","Böbrek","Dalak"],e:"İnsülin, pankreastaki beta hücrelerinde üretilir."},
+{p:"W",q:"Kana kırmızı rengini veren protein hangisidir?",o:["Hemoglobin","Kolajen","Keratin","İnsülin"],e:"Demir içeren hemoglobin oksijen taşır ve kana rengini verir."},
+{p:"W",q:"Sofra tuzunun kimyasal formülü nedir?",o:["NaCl","H2O","CO2","KCl"],e:"Sofra tuzu sodyum klorürdür: NaCl."},
+{p:"W",q:"Mutlak sıfır yaklaşık kaç santigrat derecedir?",o:["-273","-100","-459","0"],e:"Mutlak sıfır -273,15 °C'dir; -459 ise Fahrenhayt değeridir."},
+{p:"W",q:"Elektrik akımının birimi nedir?",o:["Amper","Volt","Ohm","Watt"],e:"Akım amperle, gerilim voltla, direnç ohmla, güç wattla ölçülür."},
+{p:"W",q:"Ses hızından hızlı uçan ünlü İngiliz-Fransız yolcu uçağı hangisidir?",o:["Concorde","Boeing 747","Airbus A380","Hercules"],e:"Concorde 1976-2003 arasında süpersonik yolcu taşıdı."},
+{p:"W",q:"Dünyanın en büyük sıcak çölü hangisidir?",o:["Sahra","Gobi","Kalahari","Atacama"],e:"Sahra en büyük sıcak çöldür; Antarktika ise en büyük soğuk çöl kabul edilir."},
+{p:"W",q:"Nil Nehri hangi denize dökülür?",o:["Akdeniz","Kızıldeniz","Arap Denizi","Hint Okyanusu"],e:"Nil, Mısır'da İskenderiye yakınlarında Akdeniz'e dökülür."},
+{p:"W",q:"Dünyanın bilinen en derin okyanus çukuru hangisidir?",o:["Mariana Çukuru","Porto Riko Çukuru","Japon Çukuru","Tonga Çukuru"],e:"Büyük Okyanus'taki Mariana Çukuru 11 bin metreye yaklaşır."},
+{p:"W",q:"Karada dünyanın en alçak noktası nerededir?",o:["Lut Gölü (Ölü Deniz) kıyısı","Hazar Denizi kıyısı","Ölüm Vadisi","Afar Çöküntüsü"],e:"Ölü Deniz kıyısı deniz seviyesinin 400 metreden fazla altındadır."},
+{p:"W",q:"Everest Dağı hangi iki ülkenin sınırındadır?",o:["Nepal ve Çin","Hindistan ve Nepal","Pakistan ve Çin","Butan ve Hindistan"],e:"Everest, Nepal ile Çin'in (Tibet) sınırındadır."},
+{p:"W",q:"Bayrağında akçaağaç yaprağı bulunan ülke hangisidir?",o:["Kanada","İsviçre","Japonya","Lübnan"],e:"Kanada bayrağının ortasında kırmızı akçaağaç yaprağı vardır; Lübnan'ınkinde sedir ağacı bulunur."},
+{p:"W",q:"Mısır'daki en büyük piramit hangisidir?",o:["Keops","Kefren","Mikerinos","Djoser"],e:"Gize'deki Keops Piramidi, Antik Dünyanın Yedi Harikası'ndan ayakta kalan tek eserdir."},
+{p:"W",q:"Mozart hangi şehirde doğmuştur?",o:["Salzburg","Viyana","Bonn","Prag"],e:"Mozart 1756'da Salzburg'da doğdu. Bonn ise Beethoven'ın doğduğu şehirdir."},
+{p:"W",q:"'Sefiller' romanının yazarı kimdir?",o:["Victor Hugo","Alexandre Dumas","Émile Zola","Balzac"],e:"Sefiller (1862) Victor Hugo'nun başyapıtıdır."},
+{p:"W",q:"'Don Kişot' romanının yazarı kimdir?",o:["Cervantes","Dante","Shakespeare","Lope de Vega"],e:"Don Kişot, İspanyol yazar Miguel de Cervantes'in eseridir."},
+{p:"W",q:"'Küçük Prens' kitabının yazarı kimdir?",o:["Antoine de Saint-Exupéry","Jules Verne","Hans Christian Andersen","Lewis Carroll"],e:"Küçük Prens'in yazarı, aynı zamanda pilot olan Saint-Exupéry'dir."},
+{p:"W",q:"'Yıldızlı Gece' tablosunun ressamı kimdir?",o:["Vincent van Gogh","Claude Monet","Pablo Picasso","Salvador Dalí"],e:"Van Gogh bu tabloyu 1889'da Saint-Rémy'de yaptı."},
+{p:"W",q:"Pablo Picasso hangi sanat akımının öncülerindendir?",o:["Kübizm","Empresyonizm","Gerçeküstücülük","Barok"],e:"Picasso, Georges Braque ile birlikte kübizmin kurucusudur."},
+{p:"W",q:"Rönesans hangi ülkede başlamıştır?",o:["İtalya","Fransa","İngiltere","Hollanda"],e:"Rönesans 14-15. yüzyılda Floransa başta olmak üzere İtalya'da başladı."},
+{p:"W",q:"Kristof Kolomb Amerika kıtasına hangi yıl ulaştı?",o:["1492","1453","1517","1600"],e:"Kolomb 1492'de Amerika'ya ulaştı. 1453 İstanbul'un fethi, 1517 Reform'un başlangıcıdır."},
+{p:"W",q:"Fransız Devrimi hangi yıl başladı?",o:["1789","1776","1815","1848"],e:"Devrim, 14 Temmuz 1789'da Bastille'in basılmasıyla başladı. 1776 ABD'nin bağımsızlık yılıdır."},
+{p:"W",q:"Titanik hangi yıl battı?",o:["1912","1905","1921","1898"],e:"Titanik, ilk seferinde Nisan 1912'de bir buzdağına çarparak battı."},
+{p:"W",q:"Ayasofya'yı inşa ettiren Bizans imparatoru kimdir?",o:["Jüstinyen (Justinianus)","Konstantin","Theodosius","Herakleios"],e:"Bugünkü Ayasofya, 537'de Jüstinyen döneminde tamamlandı."},
+{p:"W",q:"Topkapı Sarayı'nı yaptıran padişah kimdir?",o:["Fatih Sultan Mehmet","Kanuni Sultan Süleyman","Yavuz Sultan Selim","II. Bayezid"],e:"Topkapı Sarayı'nın yapımına Fatih döneminde, 1460'larda başlandı."},
+{p:"W",q:"Türkiye'nin ilk demiryolu hattı hangi iki şehir arasında yapıldı?",o:["İzmir – Aydın","İstanbul – Edirne","Ankara – Eskişehir","Haydarpaşa – İzmit"],e:"İzmir–Aydın hattının yapımına 1856'da başlandı."},
+{p:"W",q:"Kızılay hangi yıl 'Hilal-i Ahmer' adıyla kuruldu?",o:["1868","1923","1908","1877"],e:"Kızılay, 1868'de Osmanlı Yaralı ve Hasta Askerlere Yardım Cemiyeti olarak kuruldu."},
+{p:"W",q:"Boğaziçi (15 Temmuz Şehitler) Köprüsü hangi yıl açıldı?",o:["1973","1965","1988","1957"],e:"Köprü, Cumhuriyet'in 50. yılında, 30 Ekim 1973'te açıldı. FSM Köprüsü 1988'de açıldı."},
+{p:"W",q:"TRT ilk televizyon yayınını hangi yıl yaptı?",o:["1968","1958","1974","1980"],e:"TRT'nin ilk deneme yayını 31 Ocak 1968'de Ankara'da yapıldı."},
+{p:"W",q:"Anıtkabir hangi yıl tamamlanıp Atatürk'ün naaşı buraya taşındı?",o:["1953","1938","1944","1960"],e:"Atatürk'ün naaşı 10 Kasım 1953'te Etnografya Müzesi'nden Anıtkabir'e taşındı."},
+{p:"W",q:"Divan-ı Lügati't-Türk'ün yazarı kimdir?",o:["Kaşgarlı Mahmud","Yusuf Has Hacib","Ali Şir Nevai","Edip Ahmet Yükneki"],e:"Kaşgarlı Mahmud bu eseri 11. yüzyılda yazdı. Kutadgu Bilig ise Yusuf Has Hacib'indir."},
+{p:"W",q:"Dede Korkut Kitabı'nda kaç hikâye vardır?",o:["12","7","40","24"],e:"Dresden nüshasındaki Dede Korkut Kitabı 12 hikâyeden oluşur."},
+{p:"W",q:"Zürafanın uzun boynunda kaç omur vardır?",o:["7","14","22","36"],e:"Zürafanın da insan gibi 7 boyun omuru vardır; sadece her biri çok uzundur."},
+{p:"W",q:"Fildişi, filin aslında hangi dişleridir?",o:["Kesici dişleri","Köpek dişleri","Azı dişleri","Süt dişleri"],e:"Fillerin hortumu çevresindeki dişler, uzamış üst kesici dişlerdir."},
+{p:"W",q:"Klasik siyah-beyaz futbol topunda kaç beşgen vardır?",o:["12","20","32","6"],e:"Klasik topta 12 siyah beşgen ve 20 beyaz altıgen vardır."},
+{p:"W",q:"Rubik küpünün mucidi Ernő Rubik hangi ülkedendir?",o:["Macaristan","Polonya","Çekya","Romanya"],e:"Ernő Rubik, küpü 1974'te Budapeşte'de icat etti."}
 ];
 
 const AV=["🦁","🐯","🦊","🐼","🐸","🦉","🐙","🦄","🐺","🐻","🐧","🐝","🐔","🐮","🐲","🦅"];
 const LET=["A","B","C","D"];
-const CATS=[["ALL","🎲 Karışık"],["LOC","📍 Yöresel"],["U","Uşak"],["A","Afyon"],["K","Kütahya"],["D","Denizli"],["T","🗺️ Türkiye"],["G","🧠 Genel kültür"],["Y","📰 Gündem"]];
-const PROV={U:"Uşak",A:"Afyon",K:"Kütahya",D:"Denizli",M:"Bölge",T:"Türkiye",G:"Genel kültür",Y:"Gündem 2026",X:"Uşak"};
+const CATS=[["ALL","🎲 Karışık"],["LOC","📍 Yöresel"],["U","Uşak"],["A","Afyon"],["K","Kütahya"],["D","Denizli"],["T","🗺️ Türkiye"],["I","☪️ Dini"],["S","🎬 Sinema"],["R","🎵 Müzik"],["W","💰 Milyoner"],["G","🧠 Genel kültür"],["Y","📰 Gündem"]];
+const PROV={U:"Uşak",A:"Afyon",K:"Kütahya",D:"Denizli",M:"Bölge",T:"Türkiye",G:"Genel kültür",Y:"Gündem 2026",X:"Uşak",I:"Dini bilgiler",S:"Türk sineması",R:"Şarkı & ilahi",W:"Milyoner"};
 const PRE=3000, REVEAL_MS=9000, DUEL_REVEAL=6500;
 
 // ---------- yardımcılar ----------
@@ -534,7 +654,7 @@ function buildOrder(cat,n,withPrank){
   let order;
   if(cat==="ALL"){
     const nl=Math.round(n*.55), ny=Math.max(1,Math.round(n*.12)), ng=n-nl-ny;
-    order=shuffle([...shuffle(by("UAKDM")).slice(0,nl),...shuffle(by("GT")).slice(0,ng),...shuffle(by("Y")).slice(0,ny)]);
+    order=shuffle([...shuffle(by("UAKDM")).slice(0,nl),...shuffle(by("GTISRW")).slice(0,ng),...shuffle(by("Y")).slice(0,ny)]);
   } else if(cat==="LOC") order=shuffle(by("UAKDM")).slice(0,n);
   else if("UAKD".includes(cat)) order=shuffle(by(cat+"M")).slice(0,n);
   else order=shuffle(by(cat)).slice(0,n);
@@ -586,7 +706,7 @@ function renderHome(){
   app.innerHTML=`<div class="enter">
   <div class="topbar"><span style="font-size:26px">🏆</span><button class="icon" id="snd">${SND.on?"🔊":"🔇"}</button></div>
   <h1 class="hero">Bilgi<br><span class="grad">Yarışması</span></h1>
-  <p class="sub">Uşak • Afyon • Kütahya • Denizli ağırlıklı, Türkiye, genel kültür ve 2026 gündemiyle karışık <b>${Q.length-1}</b> soru.</p>
+  <p class="sub">Uşak • Afyon • Kütahya • Denizli ağırlıklı; dini bilgiler, Türk sineması, müzik, Milyoner tarzı, genel kültür ve gündemle karışık <b>${Q.length-1}</b> soru.</p>
   <div class="card"><label>Adın</label><input id="nm" maxlength="14" placeholder="Örn. Mehmet" value="${esc(me.n)}">
     <label style="margin-top:14px">Avatarın</label><div class="avs">${AV.map(a=>`<div class="av ${a===me.a?"on":""}" data-a="${a}">${a}</div>`).join("")}</div></div>
   <div class="mode"><div class="mt"><span>👥</span><div><b>Arkadaşlarla oyna</b><small>Herkes kendi telefonundan, canlı sıralama</small></div></div>
