@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Bilgi Yarışması • Uşak Afyon Kütahya Denizli</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d26;--mut:#aeb3e8;--gold:#ffc83d;--ok:#22d47b;--bad:#ff4d67;--glass:rgba(255,255,255,.07);--line:rgba(255,255,255,.13);
+--o0:linear-gradient(140deg,#ff6a7d,#e5304c);--o1:linear-gradient(140deg,#5a95ff,#2a5ce0);--o2:linear-gradient(140deg,#ffbf3f,#f08800);--o3:linear-gradient(140deg,#35d896,#0f9a5c)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+input{-webkit-user-select:text;user-select:text}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff;font-family:Nunito,system-ui,sans-serif;overflow-x:hidden}
+button{font-family:inherit}
+.bgfx{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.42;animation:drift 18s ease-in-out infinite alternate}
+.b1{width:70vmax;height:70vmax;background:#5b3cff;top:-30vmax;left:-25vmax}
+.b2{width:65vmax;height:65vmax;background:#ff3d8b;bottom:-35vmax;right:-30vmax;animation-delay:-6s}
+.b3{width:40vmax;height:40vmax;background:#00c2ff;top:35%;left:45%;opacity:.22;animation-delay:-12s}
+@keyframes drift{to{transform:translate(7vmax,5vmax) scale(1.15)}}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:12px 14px 40px}
+.enter{animation:enter .45s cubic-bezier(.2,.9,.3,1.15) both}
+@keyframes enter{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+.topbar{display:flex;justify-content:space-between;align-items:center;min-height:40px}
+.icon{background:var(--glass);border:1px solid var(--line);color:#fff;border-radius:12px;width:40px;height:40px;font-size:18px;cursor:pointer}
+.hero{font-size:40px;line-height:1;margin:6px 0 8px;font-weight:900;letter-spacing:-.5px}
+.grad{background:linear-gradient(90deg,#ffd75e,#ff7aa8,#8fa8ff);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200%;animation:sheen 6s linear infinite}
+@keyframes sheen{to{background-position:200% 0}}
+.sub{color:var(--mut);font-size:14.5px;line-height:1.45;margin:0 0 14px}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+label{display:block;font-weight:800;font-size:13px;margin:0 0 7px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+input{width:100%;font:inherit;font-size:18px;font-weight:800;padding:13px 14px;border-radius:14px;border:2px solid var(--line);background:rgba(0,0,0,.25);color:#fff;outline:none;transition:border-color .2s}
+input:focus{border-color:var(--gold)}
+.btn{position:relative;overflow:hidden;display:block;width:100%;font-weight:900;font-size:18px;padding:15px;border:0;border-radius:16px;cursor:pointer;margin-top:10px;color:#2a1a00;background:linear-gradient(140deg,#ffd75e,#ffa51f);box-shadow:0 5px 0 #b86f00,0 10px 24px rgba(255,170,30,.25);transition:transform .08s,box-shadow .08s}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 3.5s ease-in-out infinite}
+@keyframes shine{0%,60%{left:-60%}100%{left:130%}}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #b86f00}
+.btn.sec{background:rgba(255,255,255,.1);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.btn.sec::after{display:none}
+.btn:disabled{opacity:.4;pointer-events:none}
+.row{display:flex;gap:10px;align-items:stretch}.row>*{flex:1}
+.avs{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.av{font-size:24px;background:rgba(0,0,0,.25);border:2px solid transparent;border-radius:12px;padding:5px 0;text-align:center;cursor:pointer;transition:transform .15s}
+.av.on{border-color:var(--gold);background:rgba(255,200,61,.15);transform:scale(1.1)}
+.mode{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;color:#fff;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.mt{display:flex;gap:12px;align-items:center}
+.mt>span{font-size:34px}
+.mt b{font-size:19px;display:block}
+.mt small,.tile small{color:var(--mut);font-size:13px;font-weight:700}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{cursor:pointer;text-align:left;margin:0;display:flex;flex-direction:column;gap:3px;transition:transform .12s}
+.tile:active{transform:scale(.97)}
+.tile span{font-size:30px}.tile b{font-size:17px}
+.status{font-size:12px;color:var(--mut);text-align:center;margin-top:10px}
+.err{background:rgba(255,77,103,.15);border:1px solid rgba(255,77,103,.4);color:#ffd1d8;border-radius:14px;padding:10px 12px;font-size:14px;margin-top:10px}
+details.how{color:var(--mut);font-size:14px;line-height:1.5;margin-top:8px}
+details.how summary{cursor:pointer;font-weight:800;color:#fff}
+.codebox{text-align:center;padding:18px 10px}
+.code{font-size:56px;letter-spacing:10px;font-weight:900;background:linear-gradient(90deg,#ffd75e,#ff9a3d);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.copy{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px;margin-top:8px;cursor:pointer}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.pl{background:rgba(0,0,0,.22);border-radius:16px;padding:10px 6px;text-align:center;font-weight:800;font-size:14px;animation:pop .45s cubic-bezier(.2,1.4,.4,1) both;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl .e{font-size:32px;display:block;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-weight:800;font-size:14px;padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);background:rgba(0,0,0,.18);color:#fff;cursor:pointer;transition:all .15s}
+.chip.on{background:linear-gradient(140deg,#ffd75e,#ffa51f);border-color:transparent;color:#2a1a00;transform:scale(1.04)}
+.waitcard{text-align:center;color:var(--mut);font-weight:800;line-height:1.6}
+.dots::after{content:"";animation:dots 1.4s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+/* question */
+.hud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.pill2{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:900;font-size:15px;white-space:nowrap}
+.pill2 small{color:var(--mut);font-size:12px}
+.pill2.gold{color:var(--gold)}
+.fire{color:#ff9a3d}
+.tag{border-radius:999px;padding:5px 12px;font-size:12px;font-weight:900;background:rgba(255,255,255,.12)}
+.t-U{background:#7b4dff}.t-A{background:#e5304c}.t-K{background:#1f8fff}.t-D{background:#0fb07a}.t-M{background:#a14bd6}.t-T{background:#ff8a1f}.t-G{background:#3b4bd8}.t-Y{background:#e0347e}.t-X{background:#7b4dff}.t-I{background:#0f9a6e}.t-S{background:#c2410c}.t-R{background:#9333ea}.t-W{background:#b8860b}
+.qcard{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:24px;padding:18px 16px 18px;margin-bottom:14px;min-height:120px;display:flex;align-items:center;gap:12px}
+.qtext{font-size:21px;font-weight:900;line-height:1.3;flex:1}
+.ringbox{position:relative;width:54px;height:54px;flex:0 0 54px;align-self:flex-start}
+.ring{width:54px;height:54px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4.5}
+.ring .trk{stroke:rgba(255,255,255,.12)}
+.ring .prog{stroke:var(--ok);stroke-linecap:round;stroke-dasharray:119.4;stroke-dashoffset:0;transition:stroke .3s}
+.ringbox.warn .prog{stroke:var(--bad)}
+.ringbox b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900}
+.ringbox.warn b{color:var(--bad);animation:beat .5s ease-in-out infinite}
+@keyframes beat{50%{transform:scale(1.18)}}
+.optzone{position:relative}
+.opts{display:grid;gap:10px}
+.opt{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;text-align:left;font-weight:800;font-size:17px;color:#fff;padding:13px 14px;border:0;border-radius:18px;cursor:pointer;min-height:62px;box-shadow:0 5px 0 rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25);transition:opacity .25s,transform .12s,filter .25s}
+.opt:active{transform:translateY(3px) scale(.99)}
+.opt .lt{flex:0 0 32px;height:32px;border-radius:10px;background:rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;position:relative;z-index:1}
+.opt .ot{position:relative;z-index:1;flex:1}
+.o0{background:var(--o0)}.o1{background:var(--o1)}.o2{background:var(--o2)}.o3{background:var(--o3)}
+.opts .opt{opacity:0;transform:translateY(14px) scale(.96);pointer-events:none}
+.opts.live .opt{animation:optin .4s cubic-bezier(.2,1.2,.4,1) var(--d) both;pointer-events:auto}
+@keyframes optin{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.opts.live .opt.dim{opacity:.32;filter:saturate(.6)}
+.opts.live .opt.pick{outline:3px solid #fff;outline-offset:2px;transform:scale(1.02)}
+.opt.hide{visibility:hidden}
+.opt:disabled{cursor:default}
+.pre{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:opacity .3s,transform .3s;min-height:200px}
+.pre.gone{opacity:0;transform:scale(1.3);pointer-events:none}
+.pn{font-size:84px;font-weight:900;line-height:1;background:linear-gradient(180deg,#fff,#ffd75e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pn.pop{animation:cnt .9s cubic-bezier(.2,1.4,.4,1)}
+@keyframes cnt{0%{transform:scale(.3);opacity:0}30%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+.pl2{color:var(--mut);font-weight:900;letter-spacing:2px;text-transform:uppercase;font-size:13px}
+.jok{display:flex;gap:10px;margin-top:14px}
+.jk{flex:1;font-weight:900;font-size:15px;padding:11px;border-radius:14px;border:1.5px dashed rgba(255,255,255,.35);background:rgba(0,0,0,.15);color:#fff;cursor:pointer;transition:all .2s}
+.jk.armed{border-style:solid;border-color:var(--gold);background:rgba(255,200,61,.15);color:var(--gold);box-shadow:0 0 18px rgba(255,200,61,.3)}
+.jk:disabled{opacity:.28;cursor:default}
+.wait{text-align:center;color:var(--mut);font-weight:800;margin-top:14px;font-size:14px}
+.locked{display:inline-flex;align-items:center;gap:6px;background:rgba(34,212,123,.15);color:var(--ok);padding:7px 14px;border-radius:999px;font-weight:900;animation:pop .35s both}
+/* reveal */
+.res{text-align:center;padding:16px;border-radius:22px;margin:4px 0 12px;font-weight:900;font-size:26px;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+.res.ok{background:linear-gradient(140deg,rgba(34,212,123,.28),rgba(34,212,123,.08));color:#7dffc0;border:1px solid rgba(34,212,123,.4)}
+.res.bad{background:linear-gradient(140deg,rgba(255,77,103,.25),rgba(255,77,103,.06));color:#ffb3c0;border:1px solid rgba(255,77,103,.35)}
+.res small{display:block;font-size:14px;color:#fff;opacity:.85;margin-top:3px}
+.res .pts{font-size:34px}
+.ropt{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;margin:7px 0;font-weight:800;font-size:15px;background:rgba(255,255,255,.06);border:1.5px solid transparent;transition:all .3s}
+.ropt .lt{flex:0 0 26px;height:26px;border-radius:8px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:13px;position:relative;z-index:1}
+.ropt .ot{flex:1;position:relative;z-index:1}
+.ropt .cnt{position:relative;z-index:1;font-weight:900;color:var(--mut)}
+.ropt .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.08);animation:fillw .9s .3s ease-out forwards}
+@keyframes fillw{to{width:var(--w)}}
+.ropt.right{background:rgba(34,212,123,.2);border-color:var(--ok);animation:glow 1.6s ease-in-out 2}
+.ropt.right .lt{background:var(--ok);color:#04301a}
+.ropt.right .fill{background:rgba(34,212,123,.25)}
+.ropt.mine:not(.right){border-color:var(--bad);background:rgba(255,77,103,.12)}
+@keyframes glow{50%{box-shadow:0 0 22px rgba(34,212,123,.55)}}
+.exp{font-size:15px;line-height:1.5;color:#e3e5ff;margin:10px 0 0}
+.lbh{display:flex;justify-content:space-between;align-items:center}
+.lb{list-style:none;margin:0;padding:0}
+.lb li{height:46px;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:14px;margin:6px 0;background:rgba(0,0,0,.22);font-weight:800}
+.lb li.mv{animation:flip .8s .6s cubic-bezier(.2,.9,.25,1) both}
+@keyframes flip{from{transform:translateY(var(--from))}to{transform:none}}
+.lb li.me{background:linear-gradient(90deg,rgba(255,200,61,.22),rgba(255,200,61,.06));box-shadow:inset 0 0 0 1.5px rgba(255,200,61,.6)}
+.lb .rk{width:22px;text-align:center;color:var(--mut);font-weight:900}
+.lb li:nth-child(1) .rk{color:var(--gold)}
+.lb .e{font-size:22px}
+.lb .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb .p{color:var(--gold);font-weight:900;min-width:50px;text-align:right}
+.lb .d{font-size:12px;color:var(--ok);font-weight:900;animation:pop .4s 1.2s both}
+.nxbar{height:5px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin:14px 0 4px}
+.nxbar i{display:block;height:100%;background:linear-gradient(90deg,#8fa8ff,#ff7aa8);width:100%;transform-origin:left}
+/* final */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:22px 0 8px}
+.pd{flex:1;max-width:120px;text-align:center}
+.pd .e{font-size:42px;animation:pop .6s both}
+.pd.p1 .e{font-size:54px;animation-delay:1.1s}.pd.p2 .e{animation-delay:.7s}.pd.p3 .e{animation-delay:.3s}
+.pd .n{font-weight:900;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd .s{color:var(--gold);font-weight:900;font-size:13px}
+.pd .b{border-radius:16px 16px 4px 4px;margin-top:8px;display:flex;align-items:flex-start;justify-content:center;padding-top:10px;font-weight:900;font-size:26px;color:#2a1a00;transform-origin:bottom;animation:rise .8s cubic-bezier(.2,1.2,.4,1) both}
+.pd.p1 .b{height:130px;background:linear-gradient(180deg,#ffe082,#ffb300);animation-delay:.9s}
+.pd.p2 .b{height:95px;background:linear-gradient(180deg,#eef2f8,#b8c2d6);animation-delay:.5s}
+.pd.p3 .b{height:72px;background:linear-gradient(180deg,#ffc08a,#d9823b);animation-delay:.1s}
+@keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:rgba(0,0,0,.2);border-radius:16px;padding:12px;text-align:center}
+.stat b{display:block;font-size:22px;color:var(--gold)}
+.stat small{color:var(--mut);font-weight:800;font-size:12px}
+.banner{position:fixed;left:50%;transform:translateX(-50%);top:10px;background:rgba(255,77,103,.9);color:#fff;padding:8px 14px;border-radius:12px;font-size:13px;font-weight:800;z-index:20;display:none}
+.conf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:30}
+.conf i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(800deg)}}
+.flash{position:fixed;inset:0;pointer-events:none;z-index:25;opacity:0}
+.flash.ok{background:radial-gradient(circle,rgba(34,212,123,.35),transparent 70%);animation:fl .8s}
+.flash.bad{background:radial-gradient(circle,rgba(255,77,103,.35),transparent 70%);animation:fl .8s}
+@keyframes fl{20%{opacity:1}100%{opacity:0}}
+.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+/* duel */
+.duel{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;height:100vh;height:100dvh}
+.half{flex:1;display:flex;flex-direction:column;gap:8px;padding:12px 12px 10px;min-height:0;position:relative;overflow:hidden}
+.half.top{transform:rotate(180deg)}
+.half.p0{background:linear-gradient(180deg,rgba(42,92,224,.0),rgba(42,92,224,.18))}
+.half.p1{background:linear-gradient(180deg,rgba(229,48,76,.0),rgba(229,48,76,.18))}
+.mid{height:34px;flex:0 0 34px;position:relative;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35)}
+.mid i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--ok),var(--gold));width:100%;transform-origin:left;opacity:.35}
+.mid span{position:relative;font-weight:900;font-size:16px}
+.hh{display:flex;justify-content:space-between;align-items:center;font-weight:900}
+.hh .who{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hh .sc{color:var(--gold);font-size:16px}
+.hq{font-size:16.5px;font-weight:900;line-height:1.28;background:rgba(255,255,255,.07);border-radius:16px;padding:10px 12px}
+.dopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}
+.dopts .opt{min-height:0;font-size:14.5px;padding:8px 10px;gap:8px;border-radius:14px}
+.dopts .opt .lt{flex:0 0 24px;height:24px;font-size:13px;border-radius:8px}
+.dopts .opt.dim{opacity:.3}
+.dopts .opt.pick{outline:3px solid #fff;outline-offset:1px}
+.dopts .opt.right{outline:3px solid var(--ok);outline-offset:1px;opacity:1}
+.dopts .opt.wrong{opacity:.25}
+.dpre{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:rgba(11,13,38,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:3;transition:opacity .3s}
+.dpre.gone{opacity:0;pointer-events:none}
+.dpre .pn{font-size:70px}
+.dres{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:900}
+.dres .r{font-size:18px}
+.dres .r.ok{color:#7dffc0}.dres .r.bad{color:#ffb3c0}
+.dexp{font-size:13px;color:#dfe1ff;line-height:1.35;max-height:56px;overflow:auto}
+.dbtn{border:0;border-radius:12px;padding:9px 14px;font-weight:900;background:linear-gradient(140deg,#ffd75e,#ffa51f);color:#2a1a00;cursor:pointer}
+.hf-final{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+.hf-final .big{font-size:36px;font-weight:900;animation:pop .6s both}
+.hf-final .fs{font-weight:800;font-size:15px}
+.hf-final .row{width:100%;max-width:340px}
+.mut{color:var(--mut);font-weight:800}
+</style>
+</head>
+<body>
+<div class="bgfx"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="banner" id="banner"></div>
+<div class="flash" id="flash"></div>
+<div class="wrap" id="app"></div>
+<div class="conf" id="conf"></div>
+<script>
+// Doğru cevap her zaman o[0]; ekranda karıştırılır.
+// p: U=Uşak A=Afyon K=Kütahya D=Denizli M=Bölge(karışık) G=Genel kültür Y=Gündem
+const Q=[
+// ================= UŞAK (30) =================
+{p:"U",q:"Lidya Kralı Kroisos'a ait olduğu düşünülen ve bugün Uşak Arkeoloji Müzesi'nde sergilenen ünlü hazine hangisidir?",o:["Karun Hazinesi","Priamos Hazinesi","Midas Hazinesi","Truva Hazinesi"],e:"Karun Hazinesi yurt dışına kaçırılmış, uzun bir hukuk mücadelesinin ardından Türkiye'ye geri getirilmiştir."},
+{p:"U",q:"Karun Hazinesi'nden çalınıp yerine sahtesi konan, yıllar sonra Almanya'da bulunan eser hangisidir?",o:["Kanatlı Denizatı Broşu","Aslan Başlı Bilezik","Gümüş Testi","Altın Taç"],e:"Broş müzeden çalınıp yerine sahtesi konmuştu; daha sonra Almanya'da bulunarak Türkiye'ye geri getirildi."},
+{p:"U",q:"Karun Hazinesi Türkiye'ye hangi müzeden iade edildi?",o:["Metropolitan Müzesi (New York)","British Museum (Londra)","Louvre (Paris)","Pergamon Müzesi (Berlin)"],e:"Hazine, açılan dava sonucunda 1993'te New York'taki Metropolitan Müzesi'nden Türkiye'ye iade edildi."},
+{p:"U",q:"Karun Hazinesi, Uşak'ın hangi beldesi çevresindeki tümülüslerden kaçak kazıyla çıkarılmıştı?",o:["Güre","İnay","Bölme","Ahat"],e:"Hazine, 1960'larda Güre çevresindeki Lidya tümülüslerinden kaçak kazıyla çıkarılıp yurt dışına kaçırıldı."},
+{p:"U",q:"Karun Hazinesi'nin ait olduğu Lidya Krallığı'nın başkenti neresiydi?",o:["Sardes","Efes","Gordion","Hattuşa"],e:"Lidya'nın başkenti Sardes, bugünkü Manisa Salihli sınırlarındadır. Gordion Frigya'nın, Hattuşa Hititlerin başkentiydi."},
+{p:"U",q:"Uşak hangi yıl il oldu?",o:["1953","1923","1938","1989"],e:"Uşak, 1953'te Kütahya'dan ayrılarak il oldu."},
+{p:"U",q:"Uşak, il olmadan önce hangi ile bağlı bir ilçeydi?",o:["Kütahya","Afyonkarahisar","Manisa","Denizli"],e:"Uşak 1953'e kadar Kütahya'ya bağlıydı."},
+{p:"U",q:"Aşağıdakilerden hangisi Uşak'ın ilçesi değildir?",o:["Simav","Banaz","Eşme","Sivaslı"],e:"Simav Kütahya'nın ilçesidir. Uşak'ın ilçeleri: Merkez, Banaz, Eşme, Karahallı, Sivaslı ve Ulubey."},
+{p:"U",q:"Uşak'ta bulunan ve dünyanın en uzun kanyonlarından biri olarak tanıtılan kanyon hangisidir?",o:["Ulubey Kanyonu","Köprülü Kanyon","Saklıkent Kanyonu","Valla Kanyonu"],e:"Ulubey Kanyonu Uşak'tadır. Köprülü Antalya'da, Saklıkent Muğla'da, Valla Kastamonu'dadır."},
+{p:"U",q:"Ulubey ilçesinde, kanyon kenarına kurulmuş antik kent hangisidir?",o:["Blaundos","Aizanoi","Hierapolis","Sagalassos"],e:"Blaundos Uşak'tadır. Aizanoi Kütahya'da, Hierapolis Denizli'de, Sagalassos Burdur'dadır."},
+{p:"U",q:"Sivaslı ilçesinde bulunan antik kent hangisidir?",o:["Sebaste","Blaundos","Tripolis","Apameia"],e:"Sebaste Sivaslı'dadır. Blaundos Ulubey'de, Tripolis Denizli Buldan'da, Apameia Afyon Dinar'dadır."},
+{p:"U",q:"Uşak'ın antik çağdaki adı aşağıdakilerden hangisidir?",o:["Temenothyrai","Kotiaeion","Akmonia","Kelainai"],e:"Uşak'ın antik adı Temenothyrai'dir. Kotiaeion Kütahya'nın eski adıdır."},
+{p:"U",q:"Uşak dünyaca hangi el sanatıyla tanınır?",o:["Halıcılık","Çinicilik","Bakırcılık","Lüle taşı işlemeciliği"],e:"Uşak halısı Osmanlı'dan beri Avrupa saraylarına kadar ulaşmıştır. Çini Kütahya'nın, lüle taşı Eskişehir'in simgesidir."},
+{p:"U",q:"Hangisi klasik Uşak halısı türlerinden biridir?",o:["Madalyonlu Uşak","Hereke ipek halısı","Milas halısı","Bünyan halısı"],e:"Madalyonlu ve Yıldızlı Uşak halıları en bilinen Uşak türleridir. Hereke Kocaeli'de, Milas Muğla'da, Bünyan Kayseri'dedir."},
+{p:"U",q:"Avrupalı ressamların tablolarında görüldüğü için ressam adlarıyla anılan Uşak halıları hangileridir?",o:["Lotto ve Holbein halıları","Rembrandt ve Vermeer halıları","Da Vinci ve Rafael halıları","Monet ve Manet halıları"],e:"Lorenzo Lotto ve Hans Holbein'in tablolarında görülen Uşak halıları bu ressamların adıyla anılır."},
+{p:"U",q:"Uşak, tekstil sanayisinde özellikle hangi ürünün üretimiyle tanınır?",o:["Battaniye","İpek eşarp","Kot pantolon","Havlu"],e:"Uşak, battaniye üretimi ve tekstil geri dönüşümüyle tanınır. Havlu daha çok Denizli ile anılır."},
+{p:"U",q:"Uşak'ın düşman işgalinden kurtuluş tarihi hangisidir?",o:["1 Eylül 1922","30 Ağustos 1922","9 Eylül 1922","27 Ağustos 1922"],e:"Uşak 1 Eylül 1922'de kurtuldu. 27 Ağustos Afyon'un, 9 Eylül İzmir'in kurtuluşudur."},
+{p:"U",q:"Büyük Taarruz'un ardından Yunan Başkomutanı Trikupis hangi ilimizde esir alındı?",o:["Uşak","Afyonkarahisar","İzmir","Manisa"],e:"Trikupis Eylül 1922'de Uşak'ta esir alındı ve Mustafa Kemal Paşa ile Uşak'ta görüştürüldü."},
+{p:"U",q:"Soyadını Uşak'tan alan, Aşk-ı Memnu romanının yazarı kimdir?",o:["Halit Ziya Uşaklıgil","Reşat Nuri Güntekin","Refik Halit Karay","Mehmet Rauf"],e:"Halit Ziya'nın ailesi Uşaklı Uşşakizade ailesidir; soyadı da buradan gelir."},
+{p:"U",q:"Atatürk'ün eşi Latife Hanım'ın ailesi hangi şehirle anılır?",o:["Uşak","Kütahya","Denizli","Manisa"],e:"Latife Hanım, kökeni Uşak'a dayanan Uşşakizade (Uşaklıgil) ailesindendir."},
+{p:"U",q:"Uşak'ın plaka kodu kaçtır?",o:["64","43","03","45"],e:"64 Uşak, 43 Kütahya, 03 Afyonkarahisar, 45 Manisa."},
+{p:"U",q:"Cumhuriyet'in ilk şeker fabrikalarından biri Uşak'ta hangi yıl açıldı?",o:["1926","1923","1935","1950"],e:"Uşak Şeker Fabrikası, Alpullu ile birlikte Cumhuriyet'in ilk şeker fabrikalarındandır ve 1926'da açıldı."},
+{p:"U",q:"Uşak'taki tarihi Kılandıras Köprüsü hangi akarsu üzerindedir?",o:["Banaz Çayı","Porsuk Çayı","Akarçay","Sakarya Nehri"],e:"Kılandıras Köprüsü Banaz Çayı üzerindedir ve Uşak'ın en bilinen tarihi köprülerindendir."},
+{p:"U",q:"Uşak'tan geçen Banaz Çayı hangi büyük akarsuya karışır?",o:["Büyük Menderes","Gediz","Sakarya","Kızılırmak"],e:"Banaz Çayı, Büyük Menderes'in önemli kollarındandır."},
+{p:"U",q:"Uşak ile Kütahya arasında yükselen ve Gediz Nehri'nin doğduğu dağ hangisidir?",o:["Murat Dağı","Honaz Dağı","Sultan Dağları","Uludağ"],e:"Gediz Nehri Murat Dağı'ndan doğar. Honaz Denizli'de, Sultan Dağları Afyon-Konya arasında, Uludağ Bursa'dadır."},
+{p:"U",q:"Ulubey Kanyonu'nda ziyaretçilerin manzarayı izlediği ünlü yapı hangisidir?",o:["Cam seyir terası","Teleferik hattı","Asma köprü","Deniz feneri"],e:"Kanyonun üstüne uzanan cam seyir terası Ulubey'in en çok fotoğraflanan noktalarındandır."},
+{p:"U",q:"Uşak şehir merkezindeki, minaresinin burmalı yapısıyla tanınan cami hangisidir?",o:["Burma Cami","Yeşil Cami","Selimiye Camii","Kurşunlu Cami"],e:"Uşak'ın simge yapılarından Burma Cami adını burmalı minaresinden alır."},
+{p:"U",q:"Uşak, hangi önemli demiryolu hattının üzerindedir?",o:["İzmir – Afyonkarahisar","Samsun – Sivas","Adana – Mersin","Ankara – Zonguldak"],e:"Uşak, İzmir'den Afyonkarahisar'a, oradan da Ankara'ya uzanan hattın üzerindedir."},
+{p:"U",q:"Karun Hazinesi adını hangi kraldan alır?",o:["Lidya Kralı Kroisos","Frig Kralı Midas","Pers Kralı Dareios","Makedon Kralı İskender"],e:"'Karun', Lidya kralı Kroisos'un Doğu'daki adıdır. 'Karun kadar zengin' deyimi de buradan gelir."},
+{p:"U",q:"Halit Ziya Uşaklıgil hangi edebi topluluğun en önemli romancısıdır?",o:["Servet-i Fünun (Edebiyat-ı Cedide)","Fecr-i Ati","Garip Akımı","Beş Hececiler"],e:"Halit Ziya, Servet-i Fünun döneminin en önemli romancısıdır; Mai ve Siyah ile Aşk-ı Memnu bu dönemin eserleridir."},
+
+// ================= AFYONKARAHİSAR (30) =================
+{p:"A",q:"Büyük Taarruz'un Mustafa Kemal Paşa tarafından yönetildiği tepe hangisidir?",o:["Kocatepe","Çamlıca Tepesi","Alemdağ","Mehmetçik Tepesi"],e:"Büyük Taarruz 26 Ağustos 1922 sabahı Afyon'daki Kocatepe'den yönetildi."},
+{p:"A",q:"Büyük Taarruz hangi tarihte başladı?",o:["26 Ağustos 1922","30 Ağustos 1922","9 Eylül 1922","19 Mayıs 1919"],e:"Taarruz 26 Ağustos'ta başladı, 30 Ağustos'ta Başkomutan Meydan Muharebesi ile zaferle sonuçlandı."},
+{p:"A",q:"Büyük Taarruz'u başlatan topçu ateşi 26 Ağustos sabahı saat kaçta açıldı?",o:["05.30","03.00","07.15","09.00"],e:"Taarruz, 26 Ağustos 1922 sabahı 05.30'da Kocatepe'den başlayan topçu ateşiyle başladı."},
+{p:"A",q:"Taarruz hazırlığının gizli kalması için Ankara'da yapılacağı duyurulan etkinlik hangisiydi?",o:["Çankaya'da bir çay ziyafeti","Bir at yarışı","Bir futbol finali","Bir tiyatro galası"],e:"Hazırlıklar gizlenirken Mustafa Kemal Paşa'nın Çankaya'da çay ziyafeti vereceği haberi yayıldı."},
+{p:"A",q:"Büyük Taarruz sırasında Çiğiltepe'yi alamadığı için intihar eden tümen komutanı kimdir?",o:["Albay Reşat Bey","Albay Şefik Aker","Fahrettin Altay","Kâzım Karabekir"],e:"57. Tümen Komutanı Albay Reşat Bey, Çiğiltepe'yi zamanında alamadığını düşünerek intihar etti; tepe kısa süre sonra alındı."},
+{p:"A",q:"'Afyon' kelimesi hangi bitkiden gelir?",o:["Haşhaş","Lale","Gelincik","Kekik"],e:"Bölgede yaygın olarak yetiştirilen haşhaşın bir diğer adı 'afyon'dur."},
+{p:"A",q:"Şehrin adı resmi olarak hangi yıl 'Afyonkarahisar' oldu?",o:["2004","1923","1971","1999"],e:"Uzun süre 'Afyon' diye anılan ilin adı 2004'te resmen Afyonkarahisar oldu."},
+{p:"A",q:"Şehrin adındaki 'Karahisar' neyi anlatır?",o:["Kara kayalık üzerindeki kaleyi","Kara renkli toprağı","Karadeniz'den gelen göçmenleri","Uzun ve sert kışları"],e:"Şehrin ortasında yükselen volkanik kaya üzerindeki kale, şehre 'Karahisar' adını vermiştir."},
+{p:"A",q:"Afyon Ulu Camii'ni benzerlerinden ayıran en önemli özelliği nedir?",o:["Ahşap direkli ve ahşap tavanlı olması","Altı minareli olması","Tamamen mermerden yapılmış olması","Osmanlı'nın ilk camisi olması"],e:"Selçuklu döneminden kalan Ulu Cami, Anadolu'daki ahşap direkli camilerin önemli örneklerindendir."},
+{p:"A",q:"Afyon'daki İmaret Camii ve külliyesini yaptıran Osmanlı veziri kimdir?",o:["Gedik Ahmet Paşa","Sokullu Mehmet Paşa","Rüstem Paşa","Kara Mustafa Paşa"],e:"Fatih döneminin veziri Gedik Ahmet Paşa, Afyon'daki İmaret Camii ve külliyesini yaptırmıştır."},
+{p:"A",q:"Büyük Menderes Nehri'nin kaynağı Afyon'un hangi ilçesindedir?",o:["Dinar","Sandıklı","Emirdağ","Bolvadin"],e:"Büyük Menderes, Dinar'daki kaynaklardan doğup Ege Denizi'ne dökülür."},
+{p:"A",q:"Dinar ilçesinde bulunan antik kent hangisidir?",o:["Apameia (Kelainai)","Aizanoi","Laodikeia","Sagalassos"],e:"Apameia, eski adıyla Kelainai, Dinar'dadır."},
+{p:"A",q:"Afyon'un Dinar ilçesinde yıkıcı bir deprem hangi yıl yaşandı?",o:["1995","1970","1999","2011"],e:"1 Ekim 1995 Dinar depremi ilçede büyük yıkıma yol açtı. 1970 Gediz, 1999 Marmara, 2011 Simav ve Van depremleridir."},
+{p:"A",q:"Afyon'un mermer ocaklarıyla en çok anılan ilçesi hangisidir?",o:["İscehisar","Emirdağ","Çay","Sultandağı"],e:"İscehisar, Afyon mermerinin çıkarıldığı ve işlendiği başlıca merkezdir."},
+{p:"A",q:"Afyon'dan çıkan dünyaca ünlü mermer çeşitlerinden biri hangisidir?",o:["Afyon Menekşe","Carrara Beyazı","Marmara Grisi","Kaplan Gözü"],e:"Afyon'un menekşe damarlı mermeri dünyaca ünlüdür. Carrara İtalya'dadır."},
+{p:"A",q:"Geleneksel Afyon kaymağı hangi hayvanın sütünden yapılır?",o:["Manda","Keçi","Koyun","Deve"],e:"Afyon kaymağının ünü, yoğun ve yağlı manda sütünden gelir."},
+{p:"A",q:"Hangisi Afyon'un ünlü yöresel lezzetlerinden biri değildir?",o:["Cağ kebabı","Kaymak","Sucuk","Lokum"],e:"Cağ kebabı Erzurum'un lezzetidir. Afyon kaymağı, sucuğu ve lokumu ise meşhurdur."},
+{p:"A",q:"Afyon'un adıyla özdeşleşen lokum çeşidi hangisidir?",o:["Kaymaklı lokum","Güllü lokum","Narlı lokum","Hindistan cevizli lokum"],e:"Afyon'un kaymaklı lokumu şehrin en bilinen hediyeliklerindendir."},
+{p:"A",q:"Afyon Mevlevihanesi'nde türbesi bulunan, Mevlana'nın soyundan gelen Mevlevi büyüğü kimdir?",o:["Sultan Divani","Hacı Bektaş-ı Veli","Yunus Emre","Ahi Evran"],e:"Divane Mehmed Çelebi (Sultan Divani), Afyon'u önemli bir Mevlevi merkezi haline getirmiştir."},
+{p:"A",q:"Hangisi Afyon'daki termal bölgelerden biri değildir?",o:["Pamukkale","Gazlıgöl","Ömer-Gecek","Hüdai"],e:"Pamukkale Denizli'dedir. Gazlıgöl, Ömer-Gecek ve Sandıklı'daki Hüdai Afyon'dadır."},
+{p:"A",q:"Afyonkarahisar'ın plaka kodu kaçtır?",o:["03","43","64","42"],e:"03 Afyonkarahisar, 43 Kütahya, 64 Uşak, 42 Konya."},
+{p:"A",q:"Afyon'un düşman işgalinden kurtuluş tarihi hangisidir?",o:["27 Ağustos 1922","26 Ağustos 1922","1 Eylül 1922","30 Ağustos 1922"],e:"Afyon, taarruzun ikinci günü olan 27 Ağustos 1922'de kurtarıldı."},
+{p:"A",q:"Eber Gölü'ne kıyısı olan Afyon ilçesi hangisidir?",o:["Bolvadin","Dinar","Sandıklı","İscehisar"],e:"Eber Gölü, Bolvadin ile Çay ve Sultandağı ilçeleri arasında yer alır."},
+{p:"A",q:"Afyon ovasından geçip Eber Gölü'ne dökülen akarsu hangisidir?",o:["Akarçay","Porsuk Çayı","Banaz Çayı","Gediz"],e:"Akarçay, Afyon ovasını sulayıp Eber Gölü'ne dökülür."},
+{p:"A",q:"Kaya kiliseleri ve Frig dönemi yapılarıyla bilinen Ayazini köyü hangi ildedir?",o:["Afyonkarahisar","Nevşehir","Eskişehir","Kütahya"],e:"Ayazini, Afyon'un İhsaniye ilçesindedir ve Frig Vadisi'nin Afyon kısmında yer alır."},
+{p:"A",q:"Afyon'un Emirdağ ilçesi, en çok hangi ülkeye verdiği göçle tanınır?",o:["Belçika","Almanya","Fransa","Avusturya"],e:"Emirdağ'dan özellikle Belçika'ya yoğun göç olmuştur; ilçe 'Küçük Belçika' diye de anılır."},
+{p:"A",q:"Afyonkarahisar doğumlu olan, Türkiye'nin 10. Cumhurbaşkanı kimdir?",o:["Ahmet Necdet Sezer","Süleyman Demirel","Turgut Özal","Abdullah Gül"],e:"Ahmet Necdet Sezer 1941'de Afyonkarahisar'da doğdu ve 2000-2007 arasında cumhurbaşkanlığı yaptı."},
+{p:"A",q:"Afyon, ulaşım açısından neden 'kavşak şehir' olarak anılır?",o:["Batı ile İç Anadolu'yu bağlayan kara ve demiryollarının kesiştiği yer olduğu için","Havalimanı sayısı en çok il olduğu için","Üç denize kıyısı olduğu için","Tüm otoyolların başladığı il olduğu için"],e:"İzmir, Ankara, Konya, Antalya ve İstanbul yönlerine giden yollar Afyon'da kesişir."},
+{p:"A",q:"Afyon'daki Kocatepe adını taşıyan üniversite hangisidir?",o:["Afyon Kocatepe Üniversitesi","Dumlupınar Üniversitesi","Pamukkale Üniversitesi","Uşak Üniversitesi"],e:"Afyon Kocatepe Üniversitesi, adını Büyük Taarruz'un yönetildiği tepeden alır. Dumlupınar Kütahya'da, Pamukkale Denizli'dedir."},
+{p:"A",q:"Afyon'un hangi ilçesindeki kaplıcalar 'Hüdai' adıyla tanınır?",o:["Sandıklı","Bolvadin","Şuhut","Çay"],e:"Hüdai Kaplıcaları Sandıklı'dadır ve çamur banyolarıyla ünlüdür."},
+
+// ================= KÜTAHYA (30) =================
+{p:"K",q:"Kütahya hangi geleneksel sanatıyla ünlüdür?",o:["Çinicilik","Halıcılık","Telkari","Cam üfleme"],e:"Kütahya, İznik ile birlikte Türk çiniciliğinin en önemli merkezidir."},
+{p:"K",q:"Kütahya'nın çiniden sonra en çok tanındığı sanayi ürünü hangisidir?",o:["Porselen","Kristal cam","Deri ceket","İpek halı"],e:"Kütahya, porselen üretimiyle de Türkiye'nin önde gelen illerindendir."},
+{p:"K",q:"Zeus Tapınağı ile ünlü Aizanoi Antik Kenti hangi ilçededir?",o:["Çavdarhisar","Simav","Gediz","Emet"],e:"Aizanoi, Çavdarhisar'dadır ve Anadolu'nun en iyi korunmuş Zeus tapınaklarından birine sahiptir."},
+{p:"K",q:"Aizanoi'de bulunan ve 'dünyanın ilk borsası' olarak anılan yapı hangisidir?",o:["Makellon","Odeon","Gymnasion","Bouleuterion"],e:"Makellon'un duvarlarında Roma döneminden kalma bir fiyat listesi yazılıdır; bu yüzden 'ilk borsa' diye anılır."},
+{p:"K",q:"Kütahya'nın antik çağdaki adı hangisidir?",o:["Kotiaeion","Temenothyrai","Laodikeia","Dorylaion"],e:"Kütahya'nın antik adı Kotiaeion'dur. Temenothyrai Uşak'ın, Dorylaion Eskişehir'in eski adıdır."},
+{p:"K",q:"Kütahya, Anadolu beylikleri döneminde hangi beyliğin başkentiydi?",o:["Germiyanoğulları","Karamanoğulları","Saruhanoğulları","Aydınoğulları"],e:"Germiyanoğulları'nın merkezi Kütahya'ydı. Saruhanoğulları Manisa'da, Karamanoğulları Karaman-Konya'da hüküm sürdü."},
+{p:"K",q:"Germiyan beyinin kızıyla evlenmesi sonucu Kütahya'nın çeyiz olarak Osmanlı'ya geçtiği şehzade kimdir?",o:["Yıldırım Bayezid","Orhan Gazi","Çelebi Mehmed","II. Murad"],e:"Germiyan Beyi'nin kızı Devlet Hatun'un Yıldırım Bayezid ile evlenmesiyle Kütahya çeyiz olarak Osmanlı'ya geçti."},
+{p:"K",q:"Topraklarını vasiyetle Osmanlı'ya bırakan son Germiyan beyi kimdir?",o:["II. Yakub Bey","Süleyman Şah","Alişir Bey","Umur Bey"],e:"II. Yakub Bey 1429'da ölünce, vasiyeti üzerine Germiyan toprakları Osmanlı'ya katıldı."},
+{p:"K",q:"Osmanlı döneminde uzun süre hangi büyük eyaletin merkezi Kütahya'ydı?",o:["Anadolu Eyaleti (Beylerbeyliği)","Rumeli Eyaleti","Karaman Eyaleti","Halep Eyaleti"],e:"Kütahya, uzun süre Anadolu Beylerbeyliği'nin merkezi olarak önemli bir yönetim şehri oldu."},
+{p:"K",q:"Hüsrev ü Şirin mesnevisinin yazarı olan Kütahyalı divan şairi kimdir?",o:["Şeyhi","Fuzuli","Baki","Nedim"],e:"Şeyhi, Germiyan döneminde Kütahya'da yetişmiş, Hüsrev ü Şirin'i yazmıştır."},
+{p:"K",q:"Germiyan sarayında yetişen ve İskendername'yi yazan şair kimdir?",o:["Ahmedi","Yunus Emre","Nesimi","Ahmed Paşa"],e:"Ahmedi, Germiyanoğulları sarayında bulunmuş ve İskendername'yi yazmıştır."},
+{p:"K",q:"Ailesi Kütahyalı olan, Seyahatname'nin yazarı ünlü gezgin kimdir?",o:["Evliya Çelebi","Katip Çelebi","Piri Reis","Matrakçı Nasuh"],e:"Evliya Çelebi İstanbul'da doğdu ama ailesi Kütahyalıydı; Kütahya'daki baba evi bugün müzedir."},
+{p:"K",q:"1850'lerde Kütahya'da sürgünde yaşayan ve evi bugün müze olan Macar lider kimdir?",o:["Lajos Kossuth","Ferenc Liszt","Imre Nagy","II. Rákóczi Ferenc"],e:"Kossuth Evi Kütahya'da müze olarak ziyaret edilebiliyor. Rákóczi ise Tekirdağ'da yaşamıştı."},
+{p:"K",q:"Ertuğrul Gazi'nin annesi olarak bilinen Hayme Ana'nın türbesi Kütahya'nın hangi ilçesindedir?",o:["Domaniç","Tavşanlı","Altıntaş","Hisarcık"],e:"Hayme Ana Türbesi Domaniç'tedir; her yıl burada anma etkinlikleri yapılır."},
+{p:"K",q:"Kütahya'nın Emet ilçesi hangi madenle ünlüdür?",o:["Bor","Krom","Bakır","Altın"],e:"Emet, Türkiye'nin önemli bor yataklarından birine sahiptir."},
+{p:"K",q:"Tavşanlı'ya bağlı Tunçbilek hangi madenle bilinir?",o:["Linyit kömürü","Bor","Mermer","Demir"],e:"Tunçbilek, linyit kömürü ve termik santraliyle bilinir."},
+{p:"K",q:"Türkiye'nin en büyük gümüş madenlerinden biri Kütahya'nın hangi beldesindedir?",o:["Gümüşköy","Altınova","Bakırköy","Demirci"],e:"Gümüşköy'deki gümüş madeni Türkiye'nin en önemli gümüş üretim yerlerindendir."},
+{p:"K",q:"1970 yılında büyük bir depremle yıkılıp yeni yerine taşınan Kütahya ilçesi hangisidir?",o:["Gediz","Simav","Domaniç","Altıntaş"],e:"28 Mart 1970 Gediz depreminin ardından ilçe bugünkü yerinde yeniden kuruldu."},
+{p:"K",q:"Kütahya'nın Simav ilçesi en çok neyle bilinir?",o:["Kaplıca ve jeotermal kaynaklarıyla","Fındık bahçeleriyle","Tuz gölüyle","Çay üretimiyle"],e:"Simav, Eynal ve Çitgöl gibi kaplıcalarıyla ünlüdür."},
+{p:"K",q:"Kütahya şehir merkezine yakınlığıyla bilinen kaplıca hangisidir?",o:["Yoncalı","Gazlıgöl","Karahayıt","Hüdai"],e:"Yoncalı Kütahya'dadır. Gazlıgöl ve Hüdai Afyon'da, Karahayıt Denizli'dedir."},
+{p:"K",q:"Kütahya ve Eskişehir şehir merkezlerinden geçen akarsu hangisidir?",o:["Porsuk Çayı","Akarçay","Banaz Çayı","Çürüksu"],e:"Porsuk Çayı Kütahya'dan doğup Eskişehir'den geçer ve Sakarya'ya karışır."},
+{p:"K",q:"Başkomutan Meydan Muharebesi'nin yapıldığı Dumlupınar hangi ilin ilçesidir?",o:["Kütahya","Afyonkarahisar","Uşak","Eskişehir"],e:"Çoğu kişi Afyon sanır ama Dumlupınar Kütahya'ya bağlıdır."},
+{p:"K",q:"1921 yazında yapılan ve ordunun Sakarya'nın doğusuna çekilmesiyle sonuçlanan muharebeler hangileridir?",o:["Kütahya-Eskişehir Savaşları","I. İnönü Savaşı","Dumlupınar Savaşı","Kocatepe Muharebesi"],e:"Temmuz 1921'deki Kütahya-Eskişehir Savaşları'ndan sonra ordu Sakarya'nın doğusuna çekildi."},
+{p:"K",q:"Kütahya'nın düşman işgalinden kurtuluş tarihi hangisidir?",o:["30 Ağustos 1922","27 Ağustos 1922","1 Eylül 1922","9 Eylül 1922"],e:"Kütahya, Başkomutan Meydan Muharebesi ile aynı gün, 30 Ağustos 1922'de kurtuldu."},
+{p:"K",q:"Kütahya'nın plaka kodu kaçtır?",o:["43","42","26","64"],e:"43 Kütahya, 42 Konya, 26 Eskişehir, 64 Uşak."},
+{p:"K",q:"Kütahya'nın kaç ilçesi vardır (merkez dahil)?",o:["13","9","17","21"],e:"Kütahya'nın merkez dahil 13 ilçesi vardır; Dumlupınar, Aslanapa ve Pazarlar en küçüklerindendir."},
+{p:"K",q:"Zafer Havalimanı hangi ilin sınırları içindedir?",o:["Kütahya","Afyonkarahisar","Uşak","Eskişehir"],e:"Altıntaş'taki Zafer Havalimanı Kütahya, Afyon ve Uşak'a birlikte hizmet verir."},
+{p:"K",q:"Ege Denizi'ne dökülen Gediz Nehri hangi ilin dağlarından doğar?",o:["Kütahya","Manisa","İzmir","Aydın"],e:"Gediz Nehri Kütahya'daki Murat Dağı'ndan doğup İzmir Körfezi'nde denize dökülür."},
+{p:"K",q:"Kütahya'nın en yüksek dağı hangisidir?",o:["Murat Dağı","Honaz Dağı","Erciyes","Ilgaz Dağı"],e:"Murat Dağı Kütahya'nın en yüksek dağıdır. Honaz Denizli'de, Erciyes Kayseri'de, Ilgaz Kastamonu-Çankırı arasındadır."},
+{p:"K",q:"Kütahya'daki üniversitenin adı hangi tarihi yerden gelir?",o:["Dumlupınar","Kocatepe","Sakarya","Malazgirt"],e:"Kütahya Dumlupınar Üniversitesi adını Başkomutan Meydan Muharebesi'nin yapıldığı Dumlupınar'dan alır."},
+
+// ================= DENİZLİ (30) =================
+{p:"D",q:"Pamukkale-Hierapolis hangi yıl UNESCO Dünya Mirası Listesi'ne girdi?",o:["1988","1975","2001","2014"],e:"Pamukkale-Hierapolis, 1988'de Göreme ile birlikte Türkiye'nin ilk UNESCO alanları arasına girdi."},
+{p:"D",q:"Pamukkale travertenleri esas olarak hangi mineralden oluşur?",o:["Kalsiyum karbonat","Sodyum klorür","Demir oksit","Kükürt"],e:"Sıcak sudaki kalsiyum karbonat çökelerek beyaz traverten basamaklarını oluşturur."},
+{p:"D",q:"Pamukkale travertenlerinde ziyaretçilerden ne istenir?",o:["Ayakkabılarını çıkarmaları","Kask takmaları","Rehberle yürümeleri","Sadece gece girmeleri"],e:"Travertenlerin korunması için ziyaretçiler ayakkabısız yürür."},
+{p:"D",q:"Pamukkale travertenlerinin hemen üstündeki antik kent hangisidir?",o:["Hierapolis","Efes","Afrodisias","Bergama"],e:"Hierapolis Pamukkale'dedir. Efes İzmir'de, Afrodisias Aydın'da, Bergama İzmir'dedir."},
+{p:"D",q:"Hierapolis'in kurucusu olarak kabul edilen kral kimdir?",o:["Bergama Kralı II. Eumenes","Lidya Kralı Kroisos","Frig Kralı Midas","Pontus Kralı Mithridates"],e:"Hierapolis, MÖ 2. yüzyılda Bergama Kralı II. Eumenes tarafından kuruldu."},
+{p:"D",q:"Hierapolis'te adına martyrion (anıt mezar kilisesi) bulunan havari kimdir?",o:["Aziz Philippus","Aziz Petrus","Aziz Pavlus","Aziz Nikolaos"],e:"Havari Philippus'un Hierapolis'te öldüğüne inanılır; adına yapılan martyrion kentin önemli yapılarındandır."},
+{p:"D",q:"Pamukkale'de antik sütunların arasında yüzülebilen ünlü havuz hangi adla bilinir?",o:["Kleopatra (Antik) Havuzu","Afrodit Havuzu","Truva Havuzu","Zeus Havuzu"],e:"Antik Havuz, halk arasında Kleopatra Havuzu diye bilinir; suyun içinde antik sütun parçaları vardır."},
+{p:"D",q:"Karahayıt'taki termal suyun kırmızımsı renk vermesinin sebebi nedir?",o:["Yüksek demir oranı","İçindeki yosunlar","Toprak kayması","Bakır borular"],e:"Karahayıt'ın suyu demir bakımından zengindir; bu yüzden kırmızı traverten oluşur."},
+{p:"D",q:"İncil'de adı geçen Yedi Kilise'den biri olan Denizli'deki antik kent hangisidir?",o:["Laodikeia","Tripolis","Kolossai","Blaundos"],e:"Laodikeia, Vahiy kitabında adı geçen Yedi Kilise'den biridir."},
+{p:"D",q:"Pavlus'un mektuplarından birinin gönderildiği Kolossai antik kenti Denizli'nin hangi ilçesindedir?",o:["Honaz","Buldan","Çivril","Tavas"],e:"Kolossai Honaz'dadır; Yeni Ahit'teki Koloselilere Mektup bu kente yazılmıştır."},
+{p:"D",q:"Buldan ilçesinde bulunan antik kent hangisidir?",o:["Tripolis","Laodikeia","Hierapolis","Sebaste"],e:"Tripolis Buldan'dadır. Sebaste ise Uşak Sivaslı'dadır."},
+{p:"D",q:"Buldan ilçesi geleneksel olarak neyle ünlüdür?",o:["El dokuması bezler (Buldan bezi)","Bakır işlemeciliği","Çinicilik","Lüle taşı"],e:"Buldan, tezgâhlarda dokunan Buldan bezi ve dokuma ürünleriyle tanınır."},
+{p:"D",q:"Denizli sanayisi en çok hangi ürünle özdeşleşmiştir?",o:["Havlu ve ev tekstili","Otomobil","Gemi","Porselen"],e:"Denizli, havlu ve ev tekstili ihracatında Türkiye'nin önde gelen illerindendir."},
+{p:"D",q:"Denizli horozunu diğer horozlardan ayıran en belirgin özelliği nedir?",o:["Uzun ötüşü","Dövüşçülüğü","Tüysüz olması","Çok yumurtlaması"],e:"Denizli horozu çok uzun süre ötebilmesiyle ünlüdür; şehrin simgesidir."},
+{p:"D",q:"Denizlispor'un lakabı nedir?",o:["Horozlar","Kartallar","Timsahlar","Kanaryalar"],e:"Denizlispor, şehrin simgesi Denizli horozundan dolayı 'Horozlar' diye anılır."},
+{p:"D",q:"Denizli'nin plaka kodu kaçtır?",o:["20","35","48","09"],e:"20 Denizli, 35 İzmir, 48 Muğla, 09 Aydın."},
+{p:"D",q:"Ege Bölgesi'nin en yüksek dağı olarak bilinen ve Denizli'de bulunan dağ hangisidir?",o:["Honaz Dağı","Murat Dağı","Bozdağ","Madran Dağı"],e:"Honaz Dağı yaklaşık 2.570 metreyle Ege'nin en yüksek dağıdır; çevresi milli parktır."},
+{p:"D",q:"Honaz'da bulunan, 'yeraltındaki Pamukkale' diye anılan mağara hangisidir?",o:["Kaklık Mağarası","Damlataş Mağarası","Karain Mağarası","İnsuyu Mağarası"],e:"Kaklık Mağarası'nda Pamukkale'ye benzer traverten oluşumları vardır."},
+{p:"D",q:"Denizli ile Afyon arasında yer alan, sodyum sülfat üretimiyle bilinen göl hangisidir?",o:["Acıgöl","Salda Gölü","Eğirdir Gölü","Burdur Gölü"],e:"Acıgöl acı ve tuzlu bir göldür; sodyum sülfat elde edilir."},
+{p:"D",q:"'Türkiye'nin Maldivleri' diye anılan Salda Gölü hangi ildedir?",o:["Burdur","Denizli","Isparta","Muğla"],e:"Salda Gölü Denizli sınırına yakındır ama Burdur'un Yeşilova ilçesindedir."},
+{p:"D",q:"Yamaç paraşütüyle ünlü Babadağ hangi ildedir?",o:["Muğla","Denizli","Antalya","Aydın"],e:"Paraşütle ünlü Babadağ, Muğla Fethiye'dedir. Denizli'de de Babadağ adlı bir ilçe vardır, karıştırılmasın!"},
+{p:"D",q:"Türkiye'nin ilk jeotermal elektrik santrali Denizli'de nerede kuruldu?",o:["Sarayköy – Kızıldere","Pamukkale – Karahayıt","Buldan – Yenicekent","Çivril – Işıklı"],e:"Kızıldere Jeotermal Santrali, 1984'te Türkiye'nin ilk jeotermal santrali olarak çalışmaya başladı."},
+{p:"D",q:"Denizli'nin Çivril ilçesindeki, kuş türleriyle bilinen göl hangisidir?",o:["Işıklı Gölü","Eber Gölü","Acıgöl","Bafa Gölü"],e:"Işıklı Gölü Çivril'dedir. Eber Gölü Afyon'da, Bafa Gölü Aydın-Muğla sınırındadır."},
+{p:"D",q:"Güney ilçesinin adını taşıyan doğal güzellik hangisidir?",o:["Güney Şelalesi","Güney Kanyonu","Güney Mağarası","Güney Gölü"],e:"Güney Şelalesi, travertenler üzerinden akan suyuyla Denizli'nin görülecek yerlerindendir."},
+{p:"D",q:"Denizli'deki Çal ilçesiyle özdeşleşmiş üzüm çeşidi hangisidir?",o:["Çal Karası","Öküzgözü","Boğazkere","Narince"],e:"Çal Karası Denizli'ye özgü bir üzümdür. Öküzgözü Elazığ'ın, Boğazkere Diyarbakır'ın, Narince Tokat'ın üzümüdür."},
+{p:"D",q:"Denizli'nin kaç ilçesi vardır?",o:["19","13","11","25"],e:"Denizli'nin Merkezefendi ve Pamukkale dahil 19 ilçesi vardır."},
+{p:"D",q:"Denizli'ye hizmet veren havalimanı hangisidir?",o:["Çardak Havalimanı","Zafer Havalimanı","Dalaman Havalimanı","Adnan Menderes Havalimanı"],e:"Denizli Çardak Havalimanı Çardak ilçesindedir. Zafer Kütahya'da, Dalaman Muğla'da, Adnan Menderes İzmir'dedir."},
+{p:"D",q:"Hangisi Denizli'nin komşusu değildir?",o:["İzmir","Aydın","Muğla","Uşak"],e:"Denizli'nin komşuları: Uşak, Afyonkarahisar, Burdur, Muğla, Aydın ve Manisa. İzmir'e sınırı yoktur."},
+{p:"D",q:"Denizli'den geçip Aydın ovasından Ege'ye dökülen büyük nehir hangisidir?",o:["Büyük Menderes","Gediz","Bakırçay","Küçük Menderes"],e:"Büyük Menderes Afyon Dinar'dan doğar, Denizli ve Aydın'dan geçerek Ege'ye ulaşır."},
+{p:"D",q:"Denizli kebabı geleneksel olarak hangi etten yapılır?",o:["Kuzu","Dana","Tavuk","Hindi"],e:"Denizli kebabı, kuyu fırınında pişirilen kuzu etiyle yapılır."},
+
+// ================= BÖLGE / KARIŞIK (10) =================
+{p:"M",q:"Uşak, Afyonkarahisar, Kütahya ve Denizli hangi coğrafi bölgededir?",o:["Ege Bölgesi","İç Anadolu Bölgesi","Akdeniz Bölgesi","Marmara Bölgesi"],e:"Dördü de Ege Bölgesi'nin iç kesiminde (İç Batı Anadolu) yer alır."},
+{p:"M",q:"Uşak, Afyon, Kütahya ve Denizli'nin ortak coğrafi özelliği nedir?",o:["Hiçbirinin denize kıyısı olmaması","Hepsinin Karadeniz'e akarsu göndermesi","Hepsinin sınır kapısı olması","Hepsinin 1923'ten sonra il olması"],e:"Dördü de Ege'nin iç kesimindedir ve denize kıyıları yoktur."},
+{p:"M",q:"Frig Vadisi hangi illere yayılır?",o:["Afyon, Eskişehir, Kütahya","Uşak, Manisa, Denizli","Afyon, Konya, Isparta","Kütahya, Bursa, Bilecik"],e:"Frig Vadisi; Afyon, Eskişehir ve Kütahya arasındaki kaya mezarları ve anıtlarla dolu bölgedir."},
+{p:"M",q:"Başkomutan Meydan Muharebesi hangi tarihte kazanıldı?",o:["30 Ağustos 1922","26 Ağustos 1922","9 Eylül 1922","29 Ekim 1923"],e:"30 Ağustos bugün Zafer Bayramı olarak kutlanıyor."},
+{p:"M",q:"Büyük Taarruz sırasında Afyon, Kütahya ve Uşak'tan hangisi en son kurtarıldı?",o:["Uşak","Afyonkarahisar","Kütahya","Üçü aynı gün"],e:"Önce Afyon (27 Ağustos), sonra Kütahya (30 Ağustos), en son Uşak (1 Eylül) kurtarıldı."},
+{p:"M",q:"Hangisi Kütahya'nın komşusu değildir?",o:["Denizli","Uşak","Afyonkarahisar","Eskişehir"],e:"Kütahya'nın komşuları: Bursa, Bilecik, Eskişehir, Afyon, Uşak, Manisa ve Balıkesir."},
+{p:"M",q:"Hangisi Uşak'ın komşusu değildir?",o:["Eskişehir","Manisa","Denizli","Kütahya"],e:"Uşak'ın komşuları: Kütahya, Afyonkarahisar, Denizli ve Manisa."},
+{p:"M",q:"Büyük Menderes Nehri doğduğu yerden denize kadar sırasıyla hangi illerden geçer?",o:["Afyon – Denizli – Aydın","Kütahya – Uşak – Manisa","Uşak – Manisa – İzmir","Denizli – Muğla – Aydın"],e:"Dinar'dan (Afyon) doğar, Denizli'den geçer, Aydın'dan Ege'ye dökülür."},
+{p:"M",q:"Bu dört ilden plaka kodu en küçük olan hangisidir?",o:["Afyonkarahisar","Denizli","Kütahya","Uşak"],e:"03 Afyon, 20 Denizli, 43 Kütahya, 64 Uşak."},
+{p:"M",q:"Kütahya çinisi, Uşak halısı, Afyon kaymağı ve Denizli'nin hangi ürünü bir araya gelse 'bölgenin dört simgesi' olur?",o:["Horozu","Mermeri","Bor madeni","Porseleni"],e:"Denizli'nin en bilinen simgesi uzun öten horozudur. Mermer Afyon'un, bor ve porselen Kütahya'nın ürünleridir."},
+
+// ================= GENEL KÜLTÜR (50) =================
+{p:"G",q:"İstiklal Marşı TBMM'de hangi tarihte kabul edildi?",o:["12 Mart 1921","23 Nisan 1920","29 Ekim 1923","30 Ağustos 1922"],e:"Mehmet Akif Ersoy'un yazdığı İstiklal Marşı 12 Mart 1921'de kabul edildi."},
+{p:"G",q:"Atatürk Nutuk'u hangi yıl okudu?",o:["1927","1923","1930","1919"],e:"Nutuk, Ekim 1927'de CHP kurultayında 6 günde okundu."},
+{p:"G",q:"Harf Devrimi hangi yıl yapıldı?",o:["1928","1923","1934","1925"],e:"Latin alfabesine dayalı yeni Türk harfleri 1 Kasım 1928'de kabul edildi."},
+{p:"G",q:"Soyadı Kanunu hangi yıl çıkarıldı?",o:["1934","1928","1926","1938"],e:"Soyadı Kanunu 1934'te kabul edildi; Mustafa Kemal'e 'Atatürk' soyadı da aynı yıl verildi."},
+{p:"G",q:"Mustafa Kemal 19 Mayıs 1919'da Samsun'a hangi gemiyle çıktı?",o:["Bandırma","Hamidiye","Yavuz","Ertuğrul"],e:"Mustafa Kemal ve arkadaşları Bandırma Vapuru ile Samsun'a çıktı."},
+{p:"G",q:"Sakarya Meydan Muharebesi kaç gün sürdü?",o:["22 gün","7 gün","40 gün","3 gün"],e:"Sakarya Savaşı 23 Ağustos – 13 Eylül 1921 arasında 22 gün sürdü."},
+{p:"G",q:"Lozan Antlaşması hangi yıl imzalandı?",o:["1923","1920","1922","1925"],e:"Lozan Antlaşması 24 Temmuz 1923'te imzalandı."},
+{p:"G",q:"Çanakkale'de 'Ben size taarruzu değil, ölmeyi emrediyorum' emrini alan alay hangisidir?",o:["57. Alay","27. Alay","19. Alay","33. Alay"],e:"57. Alay, Conkbayırı'nda bu emirle savaşmış ve neredeyse tamamı şehit olmuştur."},
+{p:"G",q:"Fatih Sultan Mehmet İstanbul'u fethettiğinde kaç yaşındaydı?",o:["21","18","30","25"],e:"1432 doğumlu Fatih, 1453'teki fetih sırasında 21 yaşındaydı."},
+{p:"G",q:"Osmanlı'da 'Lale Devri' hangi padişah zamanında yaşandı?",o:["III. Ahmed","IV. Murad","II. Mahmud","I. Abdülhamid"],e:"Lale Devri (1718-1730), III. Ahmed ve sadrazamı Nevşehirli Damat İbrahim Paşa dönemidir."},
+{p:"G",q:"Mimar Sinan'ın 'ustalık eserim' dediği cami hangisidir?",o:["Selimiye Camii","Süleymaniye Camii","Şehzade Camii","Sultanahmet Camii"],e:"Sinan, Şehzade'yi 'çıraklık', Süleymaniye'yi 'kalfalık', Edirne Selimiye'yi 'ustalık' eseri saymıştır. Sultanahmet ise Sedefkâr Mehmed Ağa'nındır."},
+{p:"G",q:"Türkiye'de kadınlara milletvekili seçme ve seçilme hakkı hangi yıl verildi?",o:["1934","1923","1930","1946"],e:"Kadınlar 1930'da belediye, 1934'te milletvekili seçme ve seçilme hakkı kazandı."},
+{p:"G",q:"Türkiye'nin ilk kadın savaş pilotu kimdir?",o:["Sabiha Gökçen","Halide Edib Adıvar","Afet İnan","Bedriye Tahir"],e:"Atatürk'ün manevi kızı Sabiha Gökçen, dünyanın da ilk kadın savaş pilotlarındandır."},
+{p:"G",q:"Türkiye'nin ilk astronotu kimdir?",o:["Alper Gezeravcı","Tuva Cihangir Atasever","Barış Manço","Cahit Arf"],e:"Alper Gezeravcı Ocak 2024'te Uluslararası Uzay İstasyonu'na giden ilk Türk oldu."},
+{p:"G",q:"1961'de Eskişehir'de üretilen ilk yerli otomobil projesinin adı nedir?",o:["Devrim","Anadol","Togg","Murat"],e:"Devrim arabaları 1961'de Eskişehir'deki demiryolu atölyelerinde üretildi."},
+{p:"G",q:"Nobel Edebiyat Ödülü'nü kazanan ilk Türk yazar kimdir?",o:["Orhan Pamuk","Yaşar Kemal","Nazım Hikmet","Elif Şafak"],e:"Orhan Pamuk 2006'da Nobel Edebiyat Ödülü'nü kazandı."},
+{p:"G",q:"2015 Nobel Kimya Ödülü'nü kazanan Türk bilim insanı kimdir?",o:["Aziz Sancar","Cahit Arf","Gazi Yaşargil","Canan Dağdeviren"],e:"Aziz Sancar, DNA onarımı üzerine çalışmalarıyla 2015 Nobel Kimya Ödülü'nü aldı."},
+{p:"G",q:"'Tutunamayanlar' romanının yazarı kimdir?",o:["Oğuz Atay","Yusuf Atılgan","Sait Faik","Orhan Kemal"],e:"Tutunamayanlar (1972) Oğuz Atay'ın en bilinen romanıdır."},
+{p:"G",q:"'İnce Memed' romanının yazarı kimdir?",o:["Yaşar Kemal","Kemal Tahir","Orhan Kemal","Fakir Baykurt"],e:"İnce Memed, Yaşar Kemal'in Çukurova'yı anlatan dört ciltlik romanıdır."},
+{p:"G",q:"'Suç ve Ceza' romanının yazarı kimdir?",o:["Dostoyevski","Tolstoy","Çehov","Gogol"],e:"Suç ve Ceza, Fyodor Dostoyevski'nin 1866'da yayımlanan romanıdır."},
+{p:"G",q:"Shakespeare'in ünlü Danimarka prensi karakteri kimdir?",o:["Hamlet","Macbeth","Othello","Romeo"],e:"Hamlet, Danimarka prensidir. Macbeth İskoç, Othello Venedikli bir komutan, Romeo Veronalıdır."},
+{p:"G",q:"Mona Lisa tablosu hangi müzede sergilenir?",o:["Louvre","Prado","Uffizi","British Museum"],e:"Leonardo da Vinci'nin Mona Lisa'sı Paris'teki Louvre Müzesi'ndedir."},
+{p:"G",q:"'Uzun İnce Bir Yoldayım' türküsünün sahibi olan halk ozanı kimdir?",o:["Aşık Veysel","Karacaoğlan","Pir Sultan Abdal","Neşet Ertaş"],e:"Sivaslı Aşık Veysel'in en bilinen eseridir."},
+{p:"G",q:"Kimyasal sembolü 'W' olan element hangisidir?",o:["Tungsten","Vanadyum","Ksenon","Bizmut"],e:"Tungstenin sembolü W'dir; Almanca adı 'Wolfram'dan gelir. Ampul tellerinde kullanılır."},
+{p:"G",q:"Evrendeki en hafif ve en bol element hangisidir?",o:["Hidrojen","Helyum","Oksijen","Karbon"],e:"Hidrojen hem en hafif hem de evrende en bol bulunan elementtir."},
+{p:"G",q:"DNA kısaltmasındaki 'D' harfi neyi ifade eder?",o:["Deoksiribo","Dinamik","Dijital","Dioksit"],e:"DNA: Deoksiribonükleik asit."},
+{p:"G",q:"Yetişkin bir insanın iskeletinde yaklaşık kaç kemik bulunur?",o:["206","180","250","312"],e:"Yetişkin iskeletinde 206 kemik vardır; bebeklerde bu sayı daha fazladır, bazı kemikler zamanla kaynaşır."},
+{p:"G",q:"İnsan vücudunun en büyük organı hangisidir?",o:["Deri","Karaciğer","Akciğer","Beyin"],e:"Deri, yüzey alanı ve ağırlığıyla vücudun en büyük organıdır."},
+{p:"G",q:"Penisilini kim keşfetti?",o:["Alexander Fleming","Louis Pasteur","Robert Koch","Marie Curie"],e:"Alexander Fleming 1928'de penisilini keşfetti."},
+{p:"G",q:"Işığın boşluktaki hızı saniyede yaklaşık kaç kilometredir?",o:["300.000 km","30.000 km","3.000.000 km","150.000 km"],e:"Işık boşlukta saniyede yaklaşık 300.000 km yol alır."},
+{p:"G",q:"Güneş'e en yakın gezegen hangisidir?",o:["Merkür","Venüs","Mars","Dünya"],e:"Merkür Güneş'e en yakın gezegendir; en sıcağı ise kalın atmosferi yüzünden Venüs'tür."},
+{p:"G",q:"Ay'a ilk ayak basan insan kimdir?",o:["Neil Armstrong","Buzz Aldrin","Yuri Gagarin","Michael Collins"],e:"Neil Armstrong 1969'da Ay'a ilk adımı attı. Gagarin uzaya çıkan ilk insandır."},
+{p:"G",q:"Aşağıdakilerden hangisi asal sayı değildir?",o:["91","97","89","83"],e:"91 = 7 × 13 olduğu için asal değildir."},
+{p:"G",q:"Bir maraton koşusu kaç kilometredir?",o:["42,195 km","40 km","50 km","21,1 km"],e:"Maraton 42,195 km'dir; 21,1 km yarı maratondur."},
+{p:"G",q:"Berlin Duvarı hangi yıl yıkıldı?",o:["1989","1991","1985","1961"],e:"Berlin Duvarı 9 Kasım 1989'da yıkıldı; 1961'de inşa edilmişti."},
+{p:"G",q:"Avustralya'nın başkenti neresidir?",o:["Kanberra","Sidney","Melbourne","Perth"],e:"En büyük şehir Sidney olsa da başkent Kanberra'dır."},
+{p:"G",q:"Kanada'nın başkenti neresidir?",o:["Ottawa","Toronto","Montreal","Vancouver"],e:"Kanada'nın başkenti Ottawa'dır."},
+{p:"G",q:"Brezilya'nın resmi dili hangisidir?",o:["Portekizce","İspanyolca","Fransızca","İngilizce"],e:"Brezilya bir Portekiz sömürgesiydi; resmi dili Portekizcedir."},
+{p:"G",q:"Hangisi Avrupa Birliği üyesi olduğu halde Euro kullanmaz?",o:["Polonya","Hırvatistan","Yunanistan","Slovakya"],e:"Polonya kendi para birimi Zloti'yi kullanır. Hırvatistan 2023'te Euro'ya geçti."},
+{p:"G",q:"Dünyanın en büyük okyanusu hangisidir?",o:["Pasifik (Büyük Okyanus)","Atlas Okyanusu","Hint Okyanusu","Arktik Okyanusu"],e:"Pasifik, tek başına tüm karaların toplamından daha büyük bir alanı kaplar."},
+{p:"G",q:"Tamamı Türkiye topraklarında akan en uzun nehir hangisidir?",o:["Kızılırmak","Fırat","Sakarya","Yeşilırmak"],e:"Kızılırmak yaklaşık 1.355 km ile tamamı Türkiye'de akan en uzun nehirdir. Fırat daha uzundur ama Suriye ve Irak'tan da geçer."},
+{p:"G",q:"Türkiye'nin yüzölçümü en büyük ili hangisidir?",o:["Konya","Sivas","Ankara","Erzurum"],e:"Konya yaklaşık 40 bin km² ile Türkiye'nin en büyük ilidir."},
+{p:"G",q:"Türkiye'nin en büyük ikinci gölü hangisidir?",o:["Tuz Gölü","Beyşehir Gölü","Eğirdir Gölü","İznik Gölü"],e:"Van Gölü'nden sonra en büyük göl Tuz Gölü'dür."},
+{p:"G",q:"Türkiye'nin en az nüfuslu ili hangisidir?",o:["Bayburt","Tunceli","Ardahan","Kilis"],e:"Bayburt, yaklaşık 85 bin nüfusuyla Türkiye'nin en az nüfuslu ilidir."},
+{p:"G",q:"'Dünyanın bilinen en eski tapınağı' olarak anılan Göbeklitepe hangi ildedir?",o:["Şanlıurfa","Mardin","Diyarbakır","Gaziantep"],e:"Göbeklitepe yaklaşık 12 bin yıllık geçmişiyle Şanlıurfa'dadır."},
+{p:"G",q:"İmam bayıldı yemeğinin ana sebzesi hangisidir?",o:["Patlıcan","Kabak","Biber","Domates"],e:"İmam bayıldı, zeytinyağlı patlıcan yemeğidir."},
+{p:"G",q:"FIFA Dünya Kupası'nı en çok kazanan ülke hangisidir?",o:["Brezilya","Almanya","İtalya","Arjantin"],e:"Brezilya 5 şampiyonlukla zirvededir; Almanya ve İtalya 4'er, Arjantin 3 kez kazandı."},
+{p:"G",q:"2002 Dünya Kupası'nda Türkiye kaçıncı oldu?",o:["Üçüncü","İkinci","Dördüncü","Çeyrek finalist"],e:"Türkiye 2002'de üçüncülük maçında Güney Kore'yi 3-2 yenerek üçüncü oldu."},
+{p:"G",q:"Hakan Şükür'ün 2002 Dünya Kupası'nda Güney Kore'ye attığı rekor gol yaklaşık kaçıncı saniyede geldi?",o:["11. saniye","45. saniye","3. saniye","25. saniye"],e:"Hakan Şükür'ün yaklaşık 11 saniyede attığı gol, Dünya Kupası tarihinin en hızlı golüdür."},
+{p:"G",q:"Galatasaray UEFA Kupası'nı hangi yıl kazandı?",o:["2000","1998","2002","1996"],e:"Galatasaray, 2000'de Kopenhag'daki finalde Arsenal'i penaltılarla yenerek UEFA Kupası'nı kazandı."},
+
+// ================= GÜNDEM 2026 (20) =================
+{p:"Y",q:"2026 FIFA Dünya Kupası'nın şampiyonu hangi ülke oldu?",o:["İspanya","Arjantin","Fransa","İngiltere"],e:"İspanya, finalde Arjantin'i uzatmalarda 1-0 yenerek 2010'dan sonra ikinci kez şampiyon oldu."},
+{p:"Y",q:"2026 Dünya Kupası finalinde İspanya'ya şampiyonluğu getiren golü kim attı?",o:["Ferran Torres","Lamine Yamal","Pedri","Álvaro Morata"],e:"Ferran Torres 106. dakikada attığı golle İspanya'yı şampiyon yaptı."},
+{p:"Y",q:"2026 Dünya Kupası'na hangi ülkeler ortak ev sahipliği yaptı?",o:["ABD, Kanada, Meksika","ABD, Brezilya, Arjantin","Kanada, ABD, Küba","Meksika, Kolombiya, ABD"],e:"2026 Dünya Kupası, ilk kez üç ülkenin ortak ev sahipliğinde ve 48 takımla oynandı."},
+{p:"Y",q:"2026 Dünya Kupası finali hangi stadyumda oynandı?",o:["New York New Jersey (MetLife) Stadyumu","Azteca Stadyumu","SoFi Stadyumu","BC Place"],e:"Final, ABD'nin New Jersey eyaletindeki New York New Jersey Stadyumu'nda oynandı."},
+{p:"Y",q:"2026 Dünya Kupası'nda üçüncülük maçını kim kazandı?",o:["İngiltere","Fransa","Brezilya","Portekiz"],e:"İngiltere, gol düellosuna dönen üçüncülük maçında Fransa'yı 6-4 yendi."},
+{p:"Y",q:"A Milli Takım, 2026 Dünya Kupası'na kaç yıl aradan sonra katıldı?",o:["24 yıl","16 yıl","12 yıl","32 yıl"],e:"Türkiye, 2002'den sonra ilk kez, 24 yıl aradan sonra Dünya Kupası'nda oynadı."},
+{p:"Y",q:"Türkiye, 2026 Dünya Kupası play-off finalinde hangi takımı yenerek turnuvaya katılmayı garantiledi?",o:["Kosova","Romanya","Gürcistan","Galler"],e:"Millîler yarı finalde Romanya'yı, finalde deplasmanda Kosova'yı 1-0 yendi."},
+{p:"Y",q:"Hangisi 2026 Dünya Kupası'nda Türkiye'nin grup rakiplerinden biri değildi?",o:["Meksika","ABD","Paraguay","Avustralya"],e:"Türkiye D Grubu'nda ABD, Paraguay ve Avustralya ile eşleşti."},
+{p:"Y",q:"Türkiye, 2026 Dünya Kupası'ndaki tek galibiyetini hangi takıma karşı aldı?",o:["ABD","Paraguay","Avustralya","Bosna-Hersek"],e:"İlk iki maçı kaybeden millîler, son maçta ABD'yi 3-2 yendi ama gruptan çıkamadı."},
+{p:"Y",q:"2026 Dünya Kupası'nda A Milli Takım'ın teknik direktörü kimdi?",o:["Vincenzo Montella","Stefan Kuntz","Şenol Güneş","Fatih Terim"],e:"Millî Takım turnuvaya İtalyan teknik adam Vincenzo Montella yönetiminde katıldı."},
+{p:"Y",q:"2026 Dünya Kupası finalinde forma giyerek bir Dünya Kupası finalinde oynayan en yaşlı futbolcu olan kimdir?",o:["Lionel Messi","Cristiano Ronaldo","Luka Modrić","Ángel Di María"],e:"Messi, 39 yaşında oynadığı finalle bu rekoru kırdı; kariyerindeki üçüncü Dünya Kupası finaliydi."},
+{p:"Y",q:"2026 Eurovision Şarkı Yarışması'nı hangi ülke kazandı?",o:["Bulgaristan","İsrail","Romanya","İsveç"],e:"Bulgaristan, Dara'nın 'Bangaranga' şarkısıyla ilk Eurovision zaferini kazandı."},
+{p:"Y",q:"70. Eurovision Şarkı Yarışması (2026) hangi şehirde yapıldı?",o:["Viyana","Basel","Stockholm","Liverpool"],e:"Yarışma, 2025'i Avusturya kazandığı için Viyana'da yapıldı."},
+{p:"Y",q:"2026 Nobel Edebiyat Ödülü'nü kim kazandı?",o:["Anne Carson","Margaret Atwood","Haruki Murakami","Salman Rushdie"],e:"Ödül, Kanadalı şair ve yazar Anne Carson'a verildi."},
+{p:"Y",q:"2026 Nobel Barış Ödülü kime verildi?",o:["Navi Pillay","María Corina Machado","Volodimir Zelenskiy","Francesca Albanese"],e:"Ödül, Güney Afrikalı hukukçu ve eski BM İnsan Hakları Yüksek Komiseri Navi Pillay'a verildi. Machado 2025'te kazanmıştı."},
+{p:"Y",q:"2026 Nobel Tıp Ödülü hangi alandaki keşiflere verildi?",o:["Işığa duyarlı iyon kanalları ve optogenetik","mRNA aşıları","Kanserde bağışıklık tedavisi","CRISPR gen düzenleme"],e:"Ödül, sinir hücrelerini ışıkla kontrol etmeyi sağlayan optogenetik alanındaki keşiflere verildi."},
+{p:"Y",q:"36. NATO Liderler Zirvesi (Temmuz 2026) hangi şehirde yapıldı?",o:["Ankara","İstanbul","Lahey","Brüksel"],e:"Zirve, 7-8 Temmuz 2026'da Ankara'da Cumhurbaşkanlığı Külliyesi'nde yapıldı. Türkiye daha önce 2004'te İstanbul'da ev sahipliği yapmıştı."},
+{p:"Y",q:"Kasım 2026'da yapılan BM İklim Zirvesi COP31 Türkiye'nin hangi şehrinde düzenlendi?",o:["Antalya","İzmir","İstanbul","Muğla"],e:"COP31, 9-20 Kasım 2026'da Antalya'da düzenlendi."},
+{p:"Y",q:"2025-26 Süper Lig şampiyonu Galatasaray, bu şampiyonlukla üst üste kaçıncı kez şampiyon oldu?",o:["4.","3.","5.","2."],e:"Galatasaray Okan Buruk yönetiminde üst üste 4., toplamda 26. kez şampiyon oldu."},
+{p:"Y",q:"1 Kasım 2026'dan itibaren Türk vatandaşlarına vize uygulamaya başlayan Avrupa ülkesi hangisidir?",o:["Karadağ","Sırbistan","Bosna-Hersek","Arnavutluk"],e:"Karadağ, AB uyum süreci kapsamında Türkiye dahil 5 ülkenin vatandaşlarına vize şartı getirdi."},
+// ================= TÜRKİYE İLLERİ (30) =================
+{p:"T",q:"UNESCO listesindeki tarihi Osmanlı konaklarıyla ünlü Safranbolu hangi ildedir?",o:["Karabük","Kastamonu","Bartın","Bolu"],e:"Safranbolu, 1994'ten beri UNESCO Dünya Mirası olan Karabük ilçesidir."},
+{p:"T",q:"Dev tanrı heykelleriyle ünlü Nemrut Dağı hangi ildedir?",o:["Adıyaman","Malatya","Şanlıurfa","Diyarbakır"],e:"Kommagene Kralı I. Antiochos'un anıt mezarının bulunduğu Nemrut Dağı Adıyaman'dadır."},
+{p:"T",q:"Kayalığa oyulmuş Sümela Manastırı hangi ildedir?",o:["Trabzon","Rize","Gümüşhane","Artvin"],e:"Sümela, Trabzon Maçka'da Altındere Vadisi'ndedir."},
+{p:"T",q:"'1001 kilisenin şehri' diye anılan Ani Harabeleri hangi ildedir?",o:["Kars","Ardahan","Iğdır","Erzurum"],e:"Ani, Ermenistan sınırında, Kars'tadır."},
+{p:"T",q:"Ünlü 'Çingene Kızı' mozaiğinin sergilendiği müze hangi ildedir?",o:["Gaziantep","Hatay","Adana","Şanlıurfa"],e:"Çingene Kızı, Gaziantep'teki Zeugma Mozaik Müzesi'nin simgesidir."},
+{p:"T",q:"Baraj suları altında kalan tarihi Hasankeyf hangi ildedir?",o:["Batman","Mardin","Siirt","Diyarbakır"],e:"Hasankeyf Batman'dadır; Ilısu Barajı ile tarihi yapılarının bir kısmı taşındı."},
+{p:"T",q:"İshak Paşa Sarayı hangi ildedir?",o:["Ağrı","Van","Kars","Iğdır"],e:"İshak Paşa Sarayı, Ağrı'nın Doğubayazıt ilçesindedir."},
+{p:"T",q:"Taç kapılarıyla UNESCO listesine giren Divriği Ulu Camii ve Darüşşifası hangi ildedir?",o:["Sivas","Erzincan","Tokat","Malatya"],e:"Divriği Sivas'ın ilçesidir; yapı 1985'te UNESCO listesine girdi."},
+{p:"T",q:"Mevlana'nın anıldığı Şeb-i Arus törenleri her yıl Aralık'ta hangi şehirde yapılır?",o:["Konya","Bursa","Kayseri","Karaman"],e:"Şeb-i Arus, Mevlana'nın vefat yıldönümü olan 17 Aralık'ta Konya'da yapılır."},
+{p:"T",q:"Pestil ve köme denince akla gelen il hangisidir?",o:["Gümüşhane","Bayburt","Tokat","Amasya"],e:"Dut ile yapılan pestil ve köme Gümüşhane'nin simgesidir."},
+{p:"T",q:"Tantuni hangi şehrin yemeğidir?",o:["Mersin","Adana","Antalya","Hatay"],e:"Tantuni Mersin'in sokak lezzetidir."},
+{p:"T",q:"Pişmaniye denince akla gelen il hangisidir?",o:["Kocaeli","Bolu","Sakarya","Yalova"],e:"Pişmaniye, Kocaeli'nin geleneksel tatlısıdır."},
+{p:"T",q:"Kestane şekeri en çok hangi şehirle özdeşleşmiştir?",o:["Bursa","Aydın","Sinop","Bilecik"],e:"Kestane şekeri Bursa'nın simge lezzetidir."},
+{p:"T",q:"Künefe en çok hangi ille özdeşleşmiştir?",o:["Hatay","Gaziantep","Kilis","Adana"],e:"Künefe, Hatay mutfağının en bilinen tatlısıdır."},
+{p:"T",q:"Ezine peyniri hangi ilin ürünüdür?",o:["Çanakkale","Balıkesir","Edirne","Tekirdağ"],e:"Ezine, Çanakkale'nin ilçesidir; peyniri coğrafi işaretlidir."},
+{p:"T",q:"Türkiye'de fındık üretiminde birinci sıradaki il hangisidir?",o:["Ordu","Giresun","Trabzon","Samsun"],e:"Ordu, Türkiye'nin en çok fındık üreten ilidir."},
+{p:"T",q:"Türkiye'nin en doğu ucu (Dilucu) hangi ildedir?",o:["Iğdır","Hakkari","Van","Kars"],e:"Türkiye'nin en doğu noktası Iğdır'dadır."},
+{p:"T",q:"Türkiye'nin en kuzey ucu olan İnceburun hangi ildedir?",o:["Sinop","Kastamonu","Samsun","Bartın"],e:"Türkiye'nin en kuzey noktası Sinop İnceburun'dur."},
+{p:"T",q:"Truva (Troya) Antik Kenti hangi ildedir?",o:["Çanakkale","İzmir","Balıkesir","Manisa"],e:"Truva, Çanakkale'de Hisarlık Tepe'dedir."},
+{p:"T",q:"Antik dünyanın en iyi korunmuş tiyatrolarından Aspendos hangi ildedir?",o:["Antalya","Muğla","Aydın","Mersin"],e:"Aspendos Antik Tiyatrosu Antalya Serik'tedir."},
+{p:"T",q:"Dünyanın en büyük Türk-İslam mezarlıklarından Selçuklu Meydan Mezarlığı hangi ilçededir?",o:["Ahlat (Bitlis)","Malazgirt (Muş)","Erciş (Van)","Hasankeyf (Batman)"],e:"Ahlat Selçuklu Meydan Mezarlığı Bitlis'in Ahlat ilçesindedir."},
+{p:"T",q:"Dünyanın en eski spor organizasyonlarından Kırkpınar Yağlı Güreşleri hangi ildedir?",o:["Edirne","Kırklareli","Tekirdağ","Bursa"],e:"Kırkpınar, 1346'dan beri Edirne'de yapıldığı kabul edilen yağlı güreş festivalidir."},
+{p:"T",q:"Hangi ilimize 'Şanlı' unvanı verilmiştir?",o:["Urfa","Antep","Maraş","Adana"],e:"Urfa 1984'te 'Şanlı' unvanını aldı. Antep'e 'Gazi', Maraş'a 'Kahraman' unvanı verilmiştir."},
+{p:"T",q:"Kızılırmak hangi ilde Karadeniz'e dökülür?",o:["Samsun","Sinop","Ordu","Kastamonu"],e:"Kızılırmak, Samsun'un Bafra ilçesinde Karadeniz'e dökülür."},
+{p:"T",q:"Türkiye'nin en uzun kıyı şeridine sahip ili hangisidir?",o:["Muğla","Antalya","İzmir","Çanakkale"],e:"Girintili çıkıntılı kıyılarıyla Muğla en uzun kıyı şeridine sahip ildir."},
+{p:"T",q:"Kurtuluş Savaşı'nda tüm yurdu temsil eden ulusal kongre hangi şehirde toplandı?",o:["Sivas","Erzurum","Amasya","Balıkesir"],e:"Erzurum Kongresi bölgesel, Eylül 1919'daki Sivas Kongresi ise ulusaldır."},
+{p:"T",q:"Lüle taşı (pipo taşı) hangi ilin simgesidir?",o:["Eskişehir","Erzurum","Nevşehir","Afyonkarahisar"],e:"Lüle taşı dünyada en çok Eskişehir'de çıkarılır ve işlenir."},
+{p:"T",q:"Takılarda kullanılan siyah Oltu taşı hangi ilden çıkarılır?",o:["Erzurum","Kars","Trabzon","Artvin"],e:"Oltu taşı adını Erzurum'un Oltu ilçesinden alır."},
+{p:"T",q:"Nasreddin Hoca'nın türbesi hangi ilçededir?",o:["Akşehir (Konya)","Sivrihisar (Eskişehir)","Beypazarı (Ankara)","Ilgın (Konya)"],e:"Nasreddin Hoca Sivrihisar'da doğdu ama türbesi Akşehir'dedir."},
+{p:"T",q:"Hacı Bektaş-ı Veli Türbesi ve Külliyesi hangi ildedir?",o:["Nevşehir","Kırşehir","Kayseri","Aksaray"],e:"Hacıbektaş, Nevşehir'in ilçesidir."},
+
+// ================= BİLGİ YARIŞMASI KLASİKLERİ (20) =================
+{p:"G",q:"Satranç oyununun başında her oyuncunun kaç piyonu vardır?",o:["8","6","10","16"],e:"Her oyuncu 16 taşla başlar; bunların 8'i piyondur."},
+{p:"G",q:"Bir tavla oyununda toplam kaç pul vardır?",o:["30","24","32","36"],e:"Her oyuncunun 15 pulu vardır, toplam 30."},
+{p:"G",q:"Jokersiz bir iskambil destesinde kaç kart vardır?",o:["52","48","54","56"],e:"4 renk × 13 kart = 52 kart."},
+{p:"G",q:"Voleybolda (son set hariç) bir seti kazanmak için kaç sayı gerekir?",o:["25","21","15","30"],e:"Setler 25 sayıda biter ve en az 2 sayı fark gerekir; 5. set 15 sayıdır."},
+{p:"G",q:"İlk modern olimpiyat oyunları 1896'da hangi şehirde yapıldı?",o:["Atina","Paris","Londra","Roma"],e:"Modern olimpiyatlar 1896'da Atina'da başladı."},
+{p:"G",q:"Türk Lirası'ndan altı sıfır hangi yıl atıldı?",o:["2005","2001","2009","1999"],e:"1 Ocak 2005'te altı sıfır atılarak Yeni Türk Lirası'na geçildi."},
+{p:"G",q:"Türkiye NATO'ya hangi yıl üye oldu?",o:["1952","1949","1960","1945"],e:"Türkiye ve Yunanistan NATO'ya 1952'de katıldı."},
+{p:"G",q:"Cumhuriyet'in ilk başbakanı kimdir?",o:["İsmet İnönü","Fethi Okyar","Celal Bayar","Rauf Orbay"],e:"İsmet İnönü, 30 Ekim 1923'te Cumhuriyet'in ilk başbakanı oldu."},
+{p:"G",q:"Türkiye'nin ilk kadın bakanı kimdir?",o:["Türkan Akyol","Tansu Çiller","Sabiha Gökçen","Halide Edib Adıvar"],e:"Türkan Akyol 1971'de Sağlık Bakanı olarak ilk kadın bakan oldu. Tansu Çiller ilk kadın başbakandır."},
+{p:"G",q:"2023'ten bu yana dünyanın en kalabalık ülkesi hangisidir?",o:["Hindistan","Çin","ABD","Endonezya"],e:"Hindistan, BM verilerine göre 2023'te Çin'i geride bıraktı."},
+{p:"G",q:"Japonya'nın para birimi nedir?",o:["Yen","Yuan","Won","Ringgit"],e:"Yen Japonya'nın, Yuan Çin'in, Won Güney Kore'nin, Ringgit Malezya'nın para birimidir."},
+{p:"G",q:"Atlas Okyanusu ile Büyük Okyanus'u birleştiren kanal hangisidir?",o:["Panama Kanalı","Süveyş Kanalı","Kiel Kanalı","Korint Kanalı"],e:"Panama Kanalı iki okyanusu birleştirir. Süveyş Akdeniz ile Kızıldeniz'i bağlar."},
+{p:"G",q:"Bir ahtapotun kaç kalbi vardır?",o:["3","1","2","8"],e:"Ahtapotun 3 kalbi, 8 kolu vardır ve kanı mavidir."},
+{p:"G",q:"Parmak izleri insanınkine çok benzeyen hayvan hangisidir?",o:["Koala","Şempanze","Panda","Kanguru"],e:"Koalaların parmak izleri mikroskopta bile insanınkinden zor ayırt edilir."},
+{p:"G",q:"Dünyanın en hızlı kara hayvanı hangisidir?",o:["Çita","Aslan","Antilop","Leopar"],e:"Çita kısa mesafede saatte 100 km'nin üzerine çıkabilir."},
+{p:"G",q:"Kraliçe arının ömrü boyunca beslendiği özel besin hangisidir?",o:["Arı sütü","Polen","Propolis","Bal mumu"],e:"Kraliçe arı, larva döneminden itibaren arı sütüyle beslenir."},
+{p:"G",q:"Leonardo da Vinci'nin 'Son Akşam Yemeği' freski hangi şehirdedir?",o:["Milano","Floransa","Roma","Venedik"],e:"Fresk, Milano'daki Santa Maria delle Grazie Kilisesi'ndedir."},
+{p:"G",q:"Eyfel Kulesi hangi etkinlik için inşa edildi?",o:["1889 Paris Dünya Fuarı","1900 Paris Olimpiyatları","Fransız Devrimi'nin 50. yılı","I. Dünya Savaşı zaferi"],e:"Kule, Fransız Devrimi'nin 100. yılında düzenlenen 1889 Dünya Fuarı için yapıldı."},
+{p:"G",q:"Kahvenin anavatanı olarak kabul edilen ülke hangisidir?",o:["Etiyopya","Yemen","Brezilya","Kolombiya"],e:"Kahve Etiyopya'da keşfedildi, Yemen üzerinden dünyaya yayıldı."},
+{p:"G",q:"Patatesin anavatanı neresidir?",o:["Güney Amerika","Hindistan","İrlanda","Orta Asya"],e:"Patates And Dağları'ndan Avrupa'ya 16. yüzyılda getirildi."},
+
+// ================= SÜRPRİZ =================
+{p:"X",q:"Uşak'ın Karahallı ilçesine bağlı Külköy'de, sahibi şehir dışına gittiğinde tavuklara bakmak için en uygun kişi kimdir?",o:["Uygun","Cennet","Şanize","Kaymak Emin"],e:"Cevap sorunun içindeydi: en UYGUN kişi tabii ki Uygun! 🐔😄"},
+// ================= UŞAK EK (tarhana, Blaundos, Karahallı) =================
+{p:"U",q:"Coğrafi işaretli Uşak tarhanası, tescil şartlarına göre en az kaç gün fermente edilir?",o:["21 gün","3 gün","7 gün","60 gün"],e:"En az 21 günlük fermantasyon ve bol kırmızı biber, Uşak tarhanasını diğer tarhanalardan ayırır; 2017'de menşe adıyla tescillendi."},
+{p:"U",q:"Ulubey'deki Blaundos Antik Kenti'ne neden 'garnizon kenti' denir?",o:["Büyük İskender'in seferinde Makedon askerleri yerleştirildiği için","Roma'nın en büyük cephaneliği olduğu için","Lidya kralının sarayı olduğu için","Bizans donanmasının üssü olduğu için"],e:"Blaundos'a Büyük İskender'in Anadolu seferi sırasında Makedon askerleri yerleştirildi; kanyonla çevrili olup tek girişi olduğu için doğal bir kale gibidir."},
+{p:"U",q:"Karahallı'nın coğrafi işaret tescilli lezzeti hangisidir?",o:["Karahallı Ciğeri","Karahallı Köftesi","Karahallı Böreği","Karahallı Helvası"],e:"Karahallı Ciğeri 2022'de coğrafi işaret olarak tescil edildi."},
+{p:"U",q:"Uşak'ın nüfus ve yüzölçümü bakımından en küçük ilçesi hangisidir?",o:["Karahallı","Ulubey","Sivaslı","Banaz"],e:"Karahallı, Uşak'ın hem en az nüfuslu hem de en küçük yüzölçümlü ilçesidir."},
+{p:"U",q:"Karahallı düşman işgalinden hangi tarihte kurtuldu?",o:["2 Eylül 1922","1 Eylül 1922","30 Ağustos 1922","9 Eylül 1922"],e:"28 Ağustos 1920'de işgal edilen Karahallı, Uşak merkezden bir gün sonra, 2 Eylül 1922'de kurtuldu."},
+{p:"U",q:"Karahallı'nın doğu ve güneyinde hangi il ile sınır vardır?",o:["Denizli","Afyonkarahisar","Kütahya","Manisa"],e:"Karahallı'nın doğusunda Denizli Çivril, güneyinde Denizli Bekilli ilçeleri bulunur."},
+
+// ================= DİNİ BİLGİLER (25) =================
+{p:"I",q:"Kur'an-ı Kerim'de adı geçen tek kadın kimdir?",o:["Hz. Meryem","Hz. Hatice","Hz. Ayşe","Hz. Fatıma"],e:"Hz. Meryem'in adı Kur'an'da defalarca geçer ve bir sure de onun adını taşır."},
+{p:"I",q:"Besmele ile başlamayan tek sure hangisidir?",o:["Tevbe","Fatiha","Yasin","İhlas"],e:"Tevbe Suresi, besmelesiz başlayan tek suredir."},
+{p:"I",q:"Kur'an'ın en kısa suresi hangisidir?",o:["Kevser","İhlas","Asr","Nas"],e:"Kevser Suresi 3 ayetle en kısa suredir."},
+{p:"I",q:"İlk inen ayetler hangi surede yer alır?",o:["Alak","Fatiha","Bakara","Müddessir"],e:"Hira Mağarası'nda inen ilk ayetler 'Oku!' emriyle başlayan Alak Suresi'ndedir."},
+{p:"I",q:"'Kur'an'ın kalbi' olarak anılan sure hangisidir?",o:["Yasin","Mülk","Rahman","Kehf"],e:"Bir hadiste Yasin Suresi Kur'an'ın kalbi olarak nitelenir."},
+{p:"I",q:"Ayetü'l-Kürsi hangi surenin içindedir?",o:["Bakara","Al-i İmran","Nisa","Yasin"],e:"Ayetü'l-Kürsi, Bakara Suresi'nin 255. ayetidir."},
+{p:"I",q:"Kur'an'da adı geçen peygamber sayısı kaçtır?",o:["25","12","40","124"],e:"Kur'an'da 25 peygamberin adı geçer."},
+{p:"I",q:"Zebur hangi peygambere indirilmiştir?",o:["Hz. Davud","Hz. Musa","Hz. İsa","Hz. Süleyman"],e:"Tevrat Hz. Musa'ya, Zebur Hz. Davud'a, İncil Hz. İsa'ya indirilmiştir."},
+{p:"I",q:"Peygamber Efendimizin doğduğu yıl hangi adla anılır?",o:["Fil Yılı","Hüzün Yılı","Heyetler Yılı","Bereket Yılı"],e:"Ebrehe'nin fillerle Kâbe'ye saldırdığı yıl olan 571, 'Fil Yılı' diye anılır."},
+{p:"I",q:"Peygamber Efendimizin süt annesi kimdir?",o:["Halime","Amine","Ümmü Eymen","Süveybe"],e:"Peygamberimiz çocukluğunda Benî Sa'd kabilesinden Halime'nin yanında büyüdü. Annesi Hz. Amine'dir."},
+{p:"I",q:"İslam tarihinde ilk müezzin kimdir?",o:["Hz. Bilal-i Habeşi","Hz. Ali","Abdullah bin Ümmü Mektum","Hz. Ömer"],e:"Güzel sesiyle bilinen Hz. Bilal, ilk ezanı okuyan sahabidir."},
+{p:"I",q:"İslam'ın ilk şehidi kimdir?",o:["Hz. Sümeyye","Hz. Hamza","Hz. Yasir","Hz. Mus'ab bin Umeyr"],e:"Ammar bin Yasir'in annesi Hz. Sümeyye, inancından dolayı şehit edilen ilk Müslümandır."},
+{p:"I",q:"Hicret hangi yıl gerçekleşti?",o:["622","610","630","632"],e:"Mekke'den Medine'ye hicret 622'de oldu ve Hicri takvimin başlangıcı kabul edildi."},
+{p:"I",q:"Hicri takvimi resmen başlatan halife kimdir?",o:["Hz. Ömer","Hz. Ebubekir","Hz. Osman","Hz. Ali"],e:"Hz. Ömer döneminde hicret yılı takvimin başlangıcı olarak belirlendi."},
+{p:"I",q:"'Hak ile batılı ayıran' anlamına gelen 'Faruk' lakabı hangi sahabeye aittir?",o:["Hz. Ömer","Hz. Ebubekir","Hz. Osman","Hz. Ali"],e:"Hz. Ebubekir 'Sıddık', Hz. Ömer 'Faruk', Hz. Osman 'Zinnureyn' lakabıyla anılır."},
+{p:"I",q:"Kur'an'ı ilk kez kitap (mushaf) haline getiren halife kimdir?",o:["Hz. Ebubekir","Hz. Osman","Hz. Ömer","Hz. Ali"],e:"Kur'an Hz. Ebubekir döneminde mushaf haline getirildi; Hz. Osman döneminde çoğaltılıp merkezlere gönderildi."},
+{p:"I",q:"Kur'an nüshalarını çoğaltarak İslam şehirlerine gönderen halife kimdir?",o:["Hz. Osman","Hz. Ebubekir","Hz. Ömer","Muaviye"],e:"Hz. Osman, mushafı çoğaltıp başlıca şehirlere gönderdi."},
+{p:"I",q:"Bedir Savaşı hangi yıl yapıldı?",o:["624","622","625","627"],e:"Bedir Savaşı Hicri 2. yılda, 624'te yapıldı. Uhud 625, Hendek 627'dedir."},
+{p:"I",q:"Uhud Savaşı'nda okçuların yerleştirildiği tepe hangisidir?",o:["Ayneyn (Okçular) Tepesi","Safa Tepesi","Arafat Dağı","Nur Dağı"],e:"Okçuların Ayneyn Tepesi'ni bırakması Uhud'un seyrini değiştirdi."},
+{p:"I",q:"Hendek Savaşı'nda Medine'nin etrafına hendek kazılmasını öneren sahabi kimdir?",o:["Selman-ı Farisi","Halid bin Velid","Sa'd bin Ebi Vakkas","Zeyd bin Harise"],e:"İranlı sahabi Selman-ı Farisi'nin önerisiyle hendek kazıldı."},
+{p:"I",q:"'Allah'ın kılıcı' anlamında 'Seyfullah' lakabıyla bilinen komutan kimdir?",o:["Halid bin Velid","Hz. Hamza","Ebu Ubeyde","Amr bin As"],e:"Halid bin Velid, askeri dehası nedeniyle 'Seyfullah' lakabıyla anılır."},
+{p:"I",q:"'Seyyidü'ş-şüheda' (şehitlerin efendisi) olarak anılan sahabi kimdir?",o:["Hz. Hamza","Hz. Ali","Hz. Hüseyin","Hz. Talha"],e:"Peygamberimizin amcası Hz. Hamza, Uhud'da şehit düşmüştür."},
+{p:"I",q:"Müslümanların ilk kıblesi neresidir?",o:["Mescid-i Aksa (Kudüs)","Kâbe (Mekke)","Mescid-i Nebevi (Medine)","Kuba Mescidi"],e:"Kıble, Hicret'ten yaklaşık 16-17 ay sonra Kudüs'ten Kâbe'ye çevrildi."},
+{p:"I",q:"Kâbe'yi yeniden inşa eden baba ve oğul peygamberler kimlerdir?",o:["Hz. İbrahim ve Hz. İsmail","Hz. Yakub ve Hz. Yusuf","Hz. Davud ve Hz. Süleyman","Hz. Zekeriya ve Hz. Yahya"],e:"Kur'an'a göre Kâbe'nin temellerini Hz. İbrahim ve oğlu Hz. İsmail yükseltti."},
+{p:"I",q:"Veda Hutbesi nerede irat edilmiştir?",o:["Arafat","Medine","Taif","Uhud"],e:"Peygamberimiz Veda Haccı sırasında Veda Hutbesi'ni Arafat'ta okudu."},
+
+// ================= TÜRK SİNEMASI (20) =================
+{p:"S",q:"Hababam Sınıfı'nda Mahmut Hoca'yı kim canlandırdı?",o:["Münir Özkul","Adile Naşit","Şener Şen","Tarık Akan"],e:"Münir Özkul'un Mahmut Hoca'sı Türk sinemasının en sevilen öğretmen karakteridir."},
+{p:"S",q:"Hababam Sınıfı hangi yazarın eserinden uyarlanmıştır?",o:["Rıfat Ilgaz","Aziz Nesin","Haldun Taner","Sait Faik"],e:"Rıfat Ilgaz'ın romanından uyarlanan seri 1975'te sinemaya geldi."},
+{p:"S",q:"Hababam Sınıfı'nın geçtiği okulun adı nedir?",o:["Özel Çamlıca Lisesi","Galatasaray Lisesi","Kabataş Erkek Lisesi","Özel Boğaziçi Lisesi"],e:"Hababam Sınıfı'nın öğrencileri Özel Çamlıca Lisesi'nde okur."},
+{p:"S",q:"Hababam Sınıfı'nda 'Güdük Necmi'yi kim oynadı?",o:["Halit Akçatepe","Kemal Sunal","Cem Gürdap","Tarık Akan"],e:"Güdük Necmi'yi Halit Akçatepe, İnek Şaban'ı Kemal Sunal, Damat Ferit'i Tarık Akan oynadı."},
+{p:"S",q:"'Yeşilçam'ın Sultanı' olarak anılan oyuncu kimdir?",o:["Türkan Şoray","Hülya Koçyiğit","Fatma Girik","Filiz Akın"],e:"Türkan Şoray 'Sultan' lakabıyla anılır."},
+{p:"S",q:"'Çirkin Kral' lakabıyla bilinen yönetmen-oyuncu kimdir?",o:["Yılmaz Güney","Cüneyt Arkın","Kadir İnanır","Ayhan Işık"],e:"Yılmaz Güney 'Çirkin Kral' diye anılır. Ayhan Işık ise 'Kral' lakabıyla bilinir."},
+{p:"S",q:"Berlin'de Altın Ayı kazanan ilk Türk filmi hangisidir?",o:["Susuz Yaz","Yol","Sürü","Umut"],e:"Metin Erksan'ın Susuz Yaz filmi 1964'te Altın Ayı'yı kazandı."},
+{p:"S",q:"1982'de Cannes'da Altın Palmiye kazanan Türk filmi hangisidir?",o:["Yol","Sürü","Duvar","Kış Uykusu"],e:"Senaryosu Yılmaz Güney'e ait Yol, 1982'de Altın Palmiye'yi paylaştı."},
+{p:"S",q:"Nuri Bilge Ceylan'a 2014'te Altın Palmiye kazandıran film hangisidir?",o:["Kış Uykusu","Üç Maymun","Ahlat Ağacı","Uzak"],e:"Kış Uykusu 2014 Cannes Film Festivali'nde Altın Palmiye aldı."},
+{p:"S",q:"2011'de Cannes'da Büyük Ödül'ü kazanan 'Bir Zamanlar Anadolu'da' filminin yönetmeni kimdir?",o:["Nuri Bilge Ceylan","Zeki Demirkubuz","Semih Kaplanoğlu","Fatih Akın"],e:"Film, 2011 Cannes'da Jüri Büyük Ödülü'nü aldı."},
+{p:"S",q:"'Selvi Boylum Al Yazmalım' hangi yazarın eserinden uyarlanmıştır?",o:["Cengiz Aytmatov","Yaşar Kemal","Orhan Kemal","Sabahattin Ali"],e:"Atıf Yılmaz'ın filmi, Kırgız yazar Cengiz Aytmatov'un hikâyesinden uyarlandı."},
+{p:"S",q:"'Eşkıya' filminde Baran karakterini kim canlandırdı?",o:["Şener Şen","Uğur Yücel","Kadir İnanır","Tarık Akan"],e:"Yavuz Turgut'un 1996 yapımı Eşkıya'sında Baran'ı Şener Şen oynadı."},
+{p:"S",q:"'Babam ve Oğlum' filminin yönetmeni kimdir?",o:["Çağan Irmak","Yılmaz Erdoğan","Ömer Faruk Sorak","Cem Yılmaz"],e:"Babam ve Oğlum, Çağan Irmak'ın 2005 yapımı filmidir."},
+{p:"S",q:"'Vizontele' filmi hangi ilimizde geçer?",o:["Hakkari","Van","Mardin","Kars"],e:"Film, televizyonun Hakkari'de küçük bir kasabaya gelişini anlatır."},
+{p:"S",q:"'Neşeli Günler'de kavgalı karı-kocayı canlandıran ikili kimdir?",o:["Adile Naşit ve Münir Özkul","Ayşen Gruda ve Şener Şen","Perran Kutman ve Erol Günaydın","Gülşen Bubikoğlu ve Kemal Sunal"],e:"Adile Naşit ve Münir Özkul, rakip pastane işleten küs bir çifti oynadı."},
+{p:"S",q:"Yeşilçam'da 'Tarkan' karakterini canlandıran oyuncu kimdir?",o:["Kartal Tibet","Cüneyt Arkın","Ediz Hun","Kadir İnanır"],e:"Kartal Tibet, Sezgin Burak'ın çizgi romanı Tarkan'ı sinemada canlandırdı."},
+{p:"S",q:"'Malkoçoğlu' serisinin başrol oyuncusu kimdir?",o:["Cüneyt Arkın","Kartal Tibet","Serdar Gökhan","İzzet Günay"],e:"Malkoçoğlu, Cüneyt Arkın'ın en bilinen rollerindendir."},
+{p:"S",q:"Kült bilimkurgu filmi 'Dünyayı Kurtaran Adam'ın başrolünde kim vardır?",o:["Cüneyt Arkın","Kartal Tibet","Kemal Sunal","Yılmaz Köksal"],e:"1982 yapımı film, 'Türk Star Wars'ı' olarak da anılır."},
+{p:"S",q:"'Ayla' filmi hangi savaş sırasında yaşanan gerçek bir hikâyeyi anlatır?",o:["Kore Savaşı","Kıbrıs Harekâtı","Çanakkale Savaşı","II. Dünya Savaşı"],e:"Film, Kore'de Türk askeri Süleyman Dilbirliği ile küçük Ayla'nın hikâyesidir."},
+{p:"S",q:"'G.O.R.A.' filminin yazarı ve başrol oyuncusu kimdir?",o:["Cem Yılmaz","Şahan Gökbakar","Yılmaz Erdoğan","Ata Demirer"],e:"G.O.R.A. (2004), Cem Yılmaz'ın yazıp başrolünde oynadığı bilimkurgu komedisidir."},
+
+// ================= ŞARKI, TÜRKÜ VE İLAHİ (20) =================
+{p:"R",q:"İstiklal Marşı'nın bugün okunan bestesi kime aittir?",o:["Osman Zeki Üngör","Cemal Reşit Rey","Ahmet Adnan Saygun","Ulvi Cemal Erkin"],e:"Sözleri Mehmet Akif Ersoy'a, bugünkü bestesi Osman Zeki Üngör'e aittir."},
+{p:"R",q:"Peygamberimizin doğumunu anlatan Mevlid'i (Vesiletü'n-Necat) kim yazmıştır?",o:["Süleyman Çelebi","Yunus Emre","Fuzuli","Aziz Mahmud Hüdayi"],e:"Süleyman Çelebi'nin 15. yüzyılda yazdığı Mevlid, bugün de mevlit törenlerinde okunur."},
+{p:"R",q:"'Gel Gör Beni Aşk Neyledi' ilahisinin sözleri kime aittir?",o:["Yunus Emre","Hacı Bayram-ı Veli","Pir Sultan Abdal","Kaygusuz Abdal"],e:"Sözleri 13-14. yüzyılda yaşamış Yunus Emre'ye aittir."},
+{p:"R",q:"Bayramlarda okunan meşhur Tekbir'i besteleyen Osmanlı bestecisi kimdir?",o:["Buhurizade Mustafa Itri","Dede Efendi","Hacı Arif Bey","Tanburi Cemil Bey"],e:"Itri'nin bestelediği Tekbir yüzyıllardır bayram namazlarında okunuyor."},
+{p:"R",q:"'Tala'al Bedru Aleyna' ilahisinin hangi olay sırasında okunduğu rivayet edilir?",o:["Peygamberimizin hicretle Medine'ye gelişi","Mekke'nin fethi","Bedir zaferi","Veda Haccı"],e:"Medineliler Peygamberimizi bu ilahiyle karşıladı."},
+{p:"R",q:"'Ceddin Deden' mehter marşının bestecisi kimdir?",o:["Ali Rıza Şengel","Itri","Dede Efendi","Zekâi Dede"],e:"Ceddin Deden, Ali Rıza Şengel'in bestelediği en bilinen mehter marşıdır."},
+{p:"R",q:"'Bozkırın Tezenesi' olarak anılan halk ozanı kimdir?",o:["Neşet Ertaş","Aşık Veysel","Mahzuni Şerif","Âşık Daimi"],e:"Kırşehirli Neşet Ertaş 'Bozkırın Tezenesi' diye anılır."},
+{p:"R",q:"Neşet Ertaş'ın da usta bir halk müzisyeni olan babası kimdir?",o:["Muharrem Ertaş","Hacı Taşan","Çekiç Ali","Aşık Veysel"],e:"Muharrem Ertaş, Kırşehir abdal geleneğinin büyük ustalarındandır."},
+{p:"R",q:"Barış Manço'nun anneannesi için yazdığı şarkı hangisidir?",o:["Gülpembe","Dağlar Dağlar","Domates Biber Patlıcan","Arkadaşım Eşek"],e:"Gülpembe, Barış Manço'nun anneannesine adadığı şarkıdır."},
+{p:"R",q:"Barış Manço'nun sunduğu ünlü çocuk programının adı nedir?",o:["7'den 77'ye","Bizim Ev","Susam Sokağı","Çocuk Saati"],e:"7'den 77'ye, Barış Manço'nun dünyayı gezdiği ünlü TRT programıdır."},
+{p:"R",q:"'Minik Serçe' lakabıyla bilinen şarkıcı kimdir?",o:["Sezen Aksu","Ajda Pekkan","Nilüfer","Sertab Erener"],e:"Sezen Aksu, 'Minik Serçe' lakabıyla anılır."},
+{p:"R",q:"'Süperstar' lakabıyla bilinen şarkıcı kimdir?",o:["Ajda Pekkan","Sezen Aksu","Bülent Ersoy","Hande Yener"],e:"Ajda Pekkan 'Süperstar' diye anılır."},
+{p:"R",q:"'Sanat Güneşi' lakabıyla bilinen sanatçı kimdir?",o:["Zeki Müren","Müzeyyen Senar","Emel Sayın","Muazzez Abacı"],e:"Zeki Müren 'Sanat Güneşi' olarak anılır."},
+{p:"R",q:"Zeki Müren hangi şehirde doğdu?",o:["Bursa","İstanbul","İzmir","Bodrum"],e:"Zeki Müren 1931'de Bursa'da doğdu; son yıllarını Bodrum'da geçirdi."},
+{p:"R",q:"'İmparator' lakabıyla bilinen sanatçı kimdir?",o:["İbrahim Tatlıses","Orhan Gencebay","Ferdi Tayfur","Müslüm Gürses"],e:"İbrahim Tatlıses 'İmparator' diye anılır."},
+{p:"R",q:"'Batsın Bu Dünya' şarkısı hangi sanatçıyla özdeşleşmiştir?",o:["Orhan Gencebay","Müslüm Gürses","Ferdi Tayfur","Hakkı Bulut"],e:"Batsın Bu Dünya, Orhan Gencebay'ın en bilinen eserlerindendir."},
+{p:"R",q:"'Huzurum Kalmadı' şarkısıyla tanınan sanatçı kimdir?",o:["Ferdi Tayfur","Orhan Gencebay","İbrahim Tatlıses","Kibariye"],e:"Huzurum Kalmadı, Ferdi Tayfur'un en ünlü şarkılarındandır."},
+{p:"R",q:"Türkiye'ye 2003'te Eurovision birinciliği getiren şarkı hangisidir?",o:["Everyway That I Can","Şımarık","Dum Tek Tek","Deli"],e:"Sertab Erener, Everyway That I Can ile Letonya'nın başkenti Riga'da birinci oldu."},
+{p:"R",q:"Yurt dışında 'Kiss Kiss' adıyla bilinen Tarkan şarkısı hangisidir?",o:["Şımarık","Şıkıdım","Kuzu Kuzu","Dudu"],e:"Şımarık, dünyada 'Kiss Kiss' şarkısı olarak tanındı."},
+{p:"R",q:"MFÖ grubunun adındaki harfler kimlerin baş harfleridir?",o:["Mazhar, Fuat, Özkan","Mehmet, Ferhat, Ömer","Murat, Fikret, Önder","Mazhar, Ferhat, Özgür"],e:"MFÖ; Mazhar Alanson, Fuat Güner ve Özkan Uğur'dan oluşur."},
+
+// ================= KİM MİLYONER OLMAK İSTER TARZI (40) =================
+{p:"W",q:"Güneş'ten sonra gökyüzünde görülen en parlak yıldız hangisidir?",o:["Sirius","Kutup Yıldızı","Vega","Betelgeuse"],e:"Sirius (Akyıldız), gece gökyüzünün en parlak yıldızıdır."},
+{p:"W",q:"Kutup Yıldızı hangi takımyıldızında yer alır?",o:["Küçükayı","Büyükayı","Avcı","Kraliçe"],e:"Kutup Yıldızı, Küçükayı takımyıldızının kuyruğunun ucundadır."},
+{p:"W",q:"Titan hangi gezegenin uydusudur?",o:["Satürn","Jüpiter","Mars","Neptün"],e:"Titan, Satürn'ün en büyük uydusudur."},
+{p:"W",q:"İnsan vücudundaki en küçük kemik nerededir?",o:["Kulakta","Burunda","Ayak parmağında","El bileğinde"],e:"Orta kulaktaki üzengi kemiği vücudun en küçük kemiğidir."},
+{p:"W",q:"İnsülin hormonunu hangi organ üretir?",o:["Pankreas","Karaciğer","Böbrek","Dalak"],e:"İnsülin, pankreastaki beta hücrelerinde üretilir."},
+{p:"W",q:"Kana kırmızı rengini veren protein hangisidir?",o:["Hemoglobin","Kolajen","Keratin","İnsülin"],e:"Demir içeren hemoglobin oksijen taşır ve kana rengini verir."},
+{p:"W",q:"Sofra tuzunun kimyasal formülü nedir?",o:["NaCl","H2O","CO2","KCl"],e:"Sofra tuzu sodyum klorürdür: NaCl."},
+{p:"W",q:"Mutlak sıfır yaklaşık kaç santigrat derecedir?",o:["-273","-100","-459","0"],e:"Mutlak sıfır -273,15 °C'dir; -459 ise Fahrenhayt değeridir."},
+{p:"W",q:"Elektrik akımının birimi nedir?",o:["Amper","Volt","Ohm","Watt"],e:"Akım amperle, gerilim voltla, direnç ohmla, güç wattla ölçülür."},
+{p:"W",q:"Ses hızından hızlı uçan ünlü İngiliz-Fransız yolcu uçağı hangisidir?",o:["Concorde","Boeing 747","Airbus A380","Hercules"],e:"Concorde 1976-2003 arasında süpersonik yolcu taşıdı."},
+{p:"W",q:"Dünyanın en büyük sıcak çölü hangisidir?",o:["Sahra","Gobi","Kalahari","Atacama"],e:"Sahra en büyük sıcak çöldür; Antarktika ise en büyük soğuk çöl kabul edilir."},
+{p:"W",q:"Nil Nehri hangi denize dökülür?",o:["Akdeniz","Kızıldeniz","Arap Denizi","Hint Okyanusu"],e:"Nil, Mısır'da İskenderiye yakınlarında Akdeniz'e dökülür."},
+{p:"W",q:"Dünyanın bilinen en derin okyanus çukuru hangisidir?",o:["Mariana Çukuru","Porto Riko Çukuru","Japon Çukuru","Tonga Çukuru"],e:"Büyük Okyanus'taki Mariana Çukuru 11 bin metreye yaklaşır."},
+{p:"W",q:"Karada dünyanın en alçak noktası nerededir?",o:["Lut Gölü (Ölü Deniz) kıyısı","Hazar Denizi kıyısı","Ölüm Vadisi","Afar Çöküntüsü"],e:"Ölü Deniz kıyısı deniz seviyesinin 400 metreden fazla altındadır."},
+{p:"W",q:"Everest Dağı hangi iki ülkenin sınırındadır?",o:["Nepal ve Çin","Hindistan ve Nepal","Pakistan ve Çin","Butan ve Hindistan"],e:"Everest, Nepal ile Çin'in (Tibet) sınırındadır."},
+{p:"W",q:"Bayrağında akçaağaç yaprağı bulunan ülke hangisidir?",o:["Kanada","İsviçre","Japonya","Lübnan"],e:"Kanada bayrağının ortasında kırmızı akçaağaç yaprağı vardır; Lübnan'ınkinde sedir ağacı bulunur."},
+{p:"W",q:"Mısır'daki en büyük piramit hangisidir?",o:["Keops","Kefren","Mikerinos","Djoser"],e:"Gize'deki Keops Piramidi, Antik Dünyanın Yedi Harikası'ndan ayakta kalan tek eserdir."},
+{p:"W",q:"Mozart hangi şehirde doğmuştur?",o:["Salzburg","Viyana","Bonn","Prag"],e:"Mozart 1756'da Salzburg'da doğdu. Bonn ise Beethoven'ın doğduğu şehirdir."},
+{p:"W",q:"'Sefiller' romanının yazarı kimdir?",o:["Victor Hugo","Alexandre Dumas","Émile Zola","Balzac"],e:"Sefiller (1862) Victor Hugo'nun başyapıtıdır."},
+{p:"W",q:"'Don Kişot' romanının yazarı kimdir?",o:["Cervantes","Dante","Shakespeare","Lope de Vega"],e:"Don Kişot, İspanyol yazar Miguel de Cervantes'in eseridir."},
+{p:"W",q:"'Küçük Prens' kitabının yazarı kimdir?",o:["Antoine de Saint-Exupéry","Jules Verne","Hans Christian Andersen","Lewis Carroll"],e:"Küçük Prens'in yazarı, aynı zamanda pilot olan Saint-Exupéry'dir."},
+{p:"W",q:"'Yıldızlı Gece' tablosunun ressamı kimdir?",o:["Vincent van Gogh","Claude Monet","Pablo Picasso","Salvador Dalí"],e:"Van Gogh bu tabloyu 1889'da Saint-Rémy'de yaptı."},
+{p:"W",q:"Pablo Picasso hangi sanat akımının öncülerindendir?",o:["Kübizm","Empresyonizm","Gerçeküstücülük","Barok"],e:"Picasso, Georges Braque ile birlikte kübizmin kurucusudur."},
+{p:"W",q:"Rönesans hangi ülkede başlamıştır?",o:["İtalya","Fransa","İngiltere","Hollanda"],e:"Rönesans 14-15. yüzyılda Floransa başta olmak üzere İtalya'da başladı."},
+{p:"W",q:"Kristof Kolomb Amerika kıtasına hangi yıl ulaştı?",o:["1492","1453","1517","1600"],e:"Kolomb 1492'de Amerika'ya ulaştı. 1453 İstanbul'un fethi, 1517 Reform'un başlangıcıdır."},
+{p:"W",q:"Fransız Devrimi hangi yıl başladı?",o:["1789","1776","1815","1848"],e:"Devrim, 14 Temmuz 1789'da Bastille'in basılmasıyla başladı. 1776 ABD'nin bağımsızlık yılıdır."},
+{p:"W",q:"Titanik hangi yıl battı?",o:["1912","1905","1921","1898"],e:"Titanik, ilk seferinde Nisan 1912'de bir buzdağına çarparak battı."},
+{p:"W",q:"Ayasofya'yı inşa ettiren Bizans imparatoru kimdir?",o:["Jüstinyen (Justinianus)","Konstantin","Theodosius","Herakleios"],e:"Bugünkü Ayasofya, 537'de Jüstinyen döneminde tamamlandı."},
+{p:"W",q:"Topkapı Sarayı'nı yaptıran padişah kimdir?",o:["Fatih Sultan Mehmet","Kanuni Sultan Süleyman","Yavuz Sultan Selim","II. Bayezid"],e:"Topkapı Sarayı'nın yapımına Fatih döneminde, 1460'larda başlandı."},
+{p:"W",q:"Türkiye'nin ilk demiryolu hattı hangi iki şehir arasında yapıldı?",o:["İzmir – Aydın","İstanbul – Edirne","Ankara – Eskişehir","Haydarpaşa – İzmit"],e:"İzmir–Aydın hattının yapımına 1856'da başlandı."},
+{p:"W",q:"Kızılay hangi yıl 'Hilal-i Ahmer' adıyla kuruldu?",o:["1868","1923","1908","1877"],e:"Kızılay, 1868'de Osmanlı Yaralı ve Hasta Askerlere Yardım Cemiyeti olarak kuruldu."},
+{p:"W",q:"Boğaziçi (15 Temmuz Şehitler) Köprüsü hangi yıl açıldı?",o:["1973","1965","1988","1957"],e:"Köprü, Cumhuriyet'in 50. yılında, 30 Ekim 1973'te açıldı. FSM Köprüsü 1988'de açıldı."},
+{p:"W",q:"TRT ilk televizyon yayınını hangi yıl yaptı?",o:["1968","1958","1974","1980"],e:"TRT'nin ilk deneme yayını 31 Ocak 1968'de Ankara'da yapıldı."},
+{p:"W",q:"Anıtkabir hangi yıl tamamlanıp Atatürk'ün naaşı buraya taşındı?",o:["1953","1938","1944","1960"],e:"Atatürk'ün naaşı 10 Kasım 1953'te Etnografya Müzesi'nden Anıtkabir'e taşındı."},
+{p:"W",q:"Divan-ı Lügati't-Türk'ün yazarı kimdir?",o:["Kaşgarlı Mahmud","Yusuf Has Hacib","Ali Şir Nevai","Edip Ahmet Yükneki"],e:"Kaşgarlı Mahmud bu eseri 11. yüzyılda yazdı. Kutadgu Bilig ise Yusuf Has Hacib'indir."},
+{p:"W",q:"Dede Korkut Kitabı'nda kaç hikâye vardır?",o:["12","7","40","24"],e:"Dresden nüshasındaki Dede Korkut Kitabı 12 hikâyeden oluşur."},
+{p:"W",q:"Zürafanın uzun boynunda kaç omur vardır?",o:["7","14","22","36"],e:"Zürafanın da insan gibi 7 boyun omuru vardır; sadece her biri çok uzundur."},
+{p:"W",q:"Fildişi, filin aslında hangi dişleridir?",o:["Kesici dişleri","Köpek dişleri","Azı dişleri","Süt dişleri"],e:"Fillerin hortumu çevresindeki dişler, uzamış üst kesici dişlerdir."},
+{p:"W",q:"Klasik siyah-beyaz futbol topunda kaç beşgen vardır?",o:["12","20","32","6"],e:"Klasik topta 12 siyah beşgen ve 20 beyaz altıgen vardır."},
+{p:"W",q:"Rubik küpünün mucidi Ernő Rubik hangi ülkedendir?",o:["Macaristan","Polonya","Çekya","Romanya"],e:"Ernő Rubik, küpü 1974'te Budapeşte'de icat etti."}
+];
+
+const AV=["🦁","🐯","🦊","🐼","🐸","🦉","🐙","🦄","🐺","🐻","🐧","🐝","🐔","🐮","🐲","🦅"];
+const LET=["A","B","C","D"];
+const CATS=[["ALL","🎲 Karışık"],["LOC","📍 Yöresel"],["U","Uşak"],["A","Afyon"],["K","Kütahya"],["D","Denizli"],["T","🗺️ Türkiye"],["I","☪️ Dini"],["S","🎬 Sinema"],["R","🎵 Müzik"],["W","💰 Milyoner"],["G","🧠 Genel kültür"],["Y","📰 Gündem"]];
+const PROV={U:"Uşak",A:"Afyon",K:"Kütahya",D:"Denizli",M:"Bölge",T:"Türkiye",G:"Genel kültür",Y:"Gündem 2026",X:"Uşak",I:"Dini bilgiler",S:"Türk sineması",R:"Şarkı & ilahi",W:"Milyoner"};
+const PRE=3000, REVEAL_MS=9000, DUEL_REVEAL=6500;
+
+// ---------- yardımcılar ----------
+const app=document.getElementById("app");
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clean=(s,m=14)=>String(s||"").replace(/[\u0000-\u001f\u007f​-‏‪-‮]/g,"").trim().slice(0,m);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const rid=()=>Math.random().toString(36).slice(2,8);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+function banner(t){const b=$("banner");if(!t){b.style.display="none";return}b.textContent=t;b.style.display="block"}
+function buzz(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+function flash(kind){const f=$("flash");f.className="flash";void f.offsetWidth;f.className="flash "+kind}
+const fmtS=ms=>(ms/1000).toFixed(1).replace(".",",")+" sn";
+
+// ---------- ses ----------
+const SND={ctx:null,on:store("by_snd")!=="0"};
+function actx(){ if(!SND.ctx){try{SND.ctx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}} if(SND.ctx&&SND.ctx.state==="suspended")SND.ctx.resume().catch(()=>{}); return SND.ctx; }
+function tone(f,d,type,vol,delay){ if(!SND.on) return; const c=actx(); if(!c) return; const t=c.currentTime+(delay||0); const o=c.createOscillator(),g=c.createGain(); o.type=type||"sine"; o.frequency.setValueAtTime(f,t); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol||.12,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+d+.05); }
+const sfx={
+  tap:()=>tone(700,.07,"triangle",.1),
+  tick:()=>tone(1150,.05,"square",.035),
+  count:()=>tone(520,.14,"sine",.12),
+  go:()=>{tone(660,.1,"triangle",.13);tone(990,.22,"triangle",.13,.1)},
+  ok:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.13,i*.075)),
+  bad:()=>{tone(240,.22,"sawtooth",.07);tone(170,.32,"sawtooth",.07,.13)},
+  join:()=>{tone(880,.08,"sine",.09);tone(1320,.12,"sine",.08,.07)},
+  win:()=>[523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,.28,"triangle",.12,i*.12)),
+  lose:()=>[440,392,349].forEach((f,i)=>tone(f,.3,"sine",.09,i*.15))
+};
+document.addEventListener("pointerdown",()=>actx(),{passive:true});
+
+// ---------- soru seçimi ----------
+let prankArmed=true; // ilk oyunda 3. soru sürpriz
+function buildOrder(cat,n,withPrank){
+  const by=ps=>Q.map((q,i)=>i).filter(i=>ps.includes(Q[i].p));
+  let order;
+  if(cat==="ALL"){
+    const nl=Math.round(n*.55), ny=Math.max(1,Math.round(n*.12)), ng=n-nl-ny;
+    order=shuffle([...shuffle(by("UAKDM")).slice(0,nl),...shuffle(by("GTISRW")).slice(0,ng),...shuffle(by("Y")).slice(0,ny)]);
+  } else if(cat==="LOC") order=shuffle(by("UAKDM")).slice(0,n);
+  else if("UAKD".includes(cat)) order=shuffle(by(cat+"M")).slice(0,n);
+  else order=shuffle(by(cat)).slice(0,n);
+  if(withPrank&&order.length>=4){ const pi=Q.findIndex(q=>q.p==="X"); order.splice(2,0,pi); order.pop(); }
+  return order;
+}
+function settingsHTML(set,showPrank){
+  const chip=(k,v,t)=>`<button class="chip ${set[k]===v?"on":""}" data-k="${k}" data-v="${v}">${t}</button>`;
+  return `<label>Konu</label><div class="chips">${CATS.map(([v,t])=>chip("cat",v,t)).join("")}</div>
+  <label>Soru sayısı</label><div class="chips">${[10,15,20,30].map(n=>chip("n",n,n)).join("")}</div>
+  <label>Soru başına süre</label><div class="chips">${[15,20,30].map(t=>chip("t",t,t+" sn")).join("")}</div>
+  ${showPrank?`<label>Ekstra</label><div class="chips"><button class="chip ${set.prank?"on":""}" data-k="prank" data-v="1">🤫 Sürpriz soru (3. soru)</button></div>`:""}`;
+}
+function bindSettings(set,onChange){
+  app.querySelectorAll(".chip[data-k]").forEach(b=>b.onclick=()=>{ sfx.tap(); const k=b.dataset.k;
+    if(k==="prank") set.prank=!set.prank; else set[k]=k==="cat"?b.dataset.v:+b.dataset.v; onChange(); });
+}
+
+// ---------- durum ----------
+const FB_URL="https://bilgi-yarismasi64-default-rtdb.europe-west1.firebasedatabase.app";
+let db=null, fbReady=false, fbOnline=false, offset=0, roomRef=null, myRef=null, isHost=false, code=null, myPeer="me", hostOn=true;
+let me={n:store("by_n")||"",a:store("by_a")||AV[Math.floor(Math.random()*AV.length)]};
+let S=null, H={ans:{},x2used:{},timer:null,present:new Set()};
+let L={gid:null,qn:-1,pick:null,used5050:false,usedX2:false,x2:false,hide:[]};
+let renderKey="", raf=null, view="home", joinErr="", lastPhase="", wTimer=null;
+let DU=null, DSET={n:10,t:20,cat:"ALL",prank:true}, DP=[{n:"",a:""},{n:"Oyuncu 2",a:"🐯"}];
+const plain=o=>JSON.parse(JSON.stringify(o));
+
+(function fbInit(){
+  try{
+    firebase.initializeApp({databaseURL:FB_URL});
+    db=firebase.database();
+    db.ref(".info/serverTimeOffset").on("value",s=>{offset=s.val()||0});
+    db.ref(".info/connected").on("value",s=>{
+      fbOnline=!!s.val(); fbReady=true;
+      if(fbOnline&&myRef&&me.n){ myRef.onDisconnect().remove(); myRef.update({n:me.n,a:me.a}).catch(()=>{}); if(isHost&&roomRef){ roomRef.child("host").onDisconnect().set({on:false}); roomRef.child("host").set({on:true}).catch(()=>{}); } }
+      if(view==="home") renderHome();
+      if(view==="game"&&roomRef) banner(fbOnline?"":"İnternet bağlantısı koptu, yeniden bağlanılıyor…");
+    });
+    setTimeout(()=>{ if(!fbReady){ fbReady=true; if(view==="home") renderHome(); } },6000);
+  }catch(e){ db=null; fbReady=true; }
+})();
+
+// ================= ANA EKRAN =================
+function renderHome(){
+  view="home"; renderKey=""; lastPhase=""; cancelAnimationFrame(raf); DU=null;
+  const mp=!!db&&fbOnline;
+  const conn=!fbReady?"Bağlantı kuruluyor…":(mp?"🟢 Çok oyunculu hazır":"⚪ Çok oyunculu için internet bağlantısı gerekli; tekli ve eşli mod çalışır");
+  app.innerHTML=`<div class="enter">
+  <div class="topbar"><span style="font-size:26px">🏆</span><button class="icon" id="snd">${SND.on?"🔊":"🔇"}</button></div>
+  <h1 class="hero">Bilgi<br><span class="grad">Yarışması</span></h1>
+  <p class="sub">Uşak • Afyon • Kütahya • Denizli ağırlıklı; dini bilgiler, Türk sineması, müzik, Milyoner tarzı, genel kültür ve gündemle karışık <b>${Q.length-1}</b> soru.</p>
+  <div class="card"><label>Adın</label><input id="nm" maxlength="14" placeholder="Örn. Mehmet" value="${esc(me.n)}">
+    <label style="margin-top:14px">Avatarın</label><div class="avs">${AV.map(a=>`<div class="av ${a===me.a?"on":""}" data-a="${a}">${a}</div>`).join("")}</div></div>
+  <div class="mode"><div class="mt"><span>👥</span><div><b>Arkadaşlarla oyna</b><small>Herkes kendi telefonundan, canlı sıralama</small></div></div>
+    <button class="btn" id="bHost" ${mp?"":"disabled"}>🎮 Oda Kur</button>
+    <div class="row" style="margin-top:10px"><input id="cd" inputmode="numeric" maxlength="4" placeholder="Oda kodu"><button class="btn sec" id="bJoin" style="margin-top:0;flex:.75" ${mp?"":"disabled"}>Katıl</button></div>
+    <div class="status">${conn}</div></div>
+  <div class="row2">
+    <button class="mode tile" id="bSolo"><span>🙋</span><b>Tekli Mod</b><small>Kendini dene, rekorunu kır</small></button>
+    <button class="mode tile" id="bDuel"><span>⚔️</span><b>Eşli Mod</b><small>Tek telefonda karşılıklı düello</small></button></div>
+  ${joinErr?`<div class="err">${esc(joinErr)}</div>`:""}
+  <details class="how"><summary>Puanlama nasıl?</summary>Doğru cevap 500 puan, hızına göre +500'e kadar bonus. Üst üste doğrularda 🔥 seri bonusu (+100, +200, +300). Her oyunda bir kez <b>✂️ 50:50</b> ve bir kez <b>⚡ 2x puan</b> jokeri. Odayı kuran ayarları seçer; diğerleri 4 haneli kodla katılır. Odayı kuran telefonun ekranı oyun boyunca açık kalmalı.</details>
+  </div>`;
+  app.querySelectorAll(".av").forEach(el=>el.onclick=()=>{sfx.tap();me.a=el.dataset.a;app.querySelectorAll(".av").forEach(x=>x.classList.toggle("on",x===el))});
+  $("snd").onclick=()=>{SND.on=!SND.on;store("by_snd",SND.on?"1":"0");$("snd").textContent=SND.on?"🔊":"🔇";sfx.tap()};
+  $("bHost").onclick=()=>{if(saveMe()){sfx.tap();createRoom(false)}};
+  $("bSolo").onclick=()=>{if(saveMe()){sfx.tap();createRoom(true)}};
+  $("bJoin").onclick=()=>{if(saveMe()){sfx.tap();joinRoom($("cd").value)}};
+  $("bDuel").onclick=()=>{ const n=clean($("nm").value); if(n){me.n=n;store("by_n",n)} store("by_a",me.a); sfx.tap(); duelSetup(); };
+}
+function saveMe(){
+  const n=clean($("nm").value);
+  if(!n){ joinErr="Önce adını yaz."; renderHome(); setTimeout(()=>{const i=$("nm"); if(i){i.focus(); i.classList.add("shake")}},50); return false; }
+  me.n=n; store("by_n",n); store("by_a",me.a); joinErr=""; return true;
+}
+
+// ================= ODA SAHİBİ (çok oyunculu + tekli) =================
+async function createRoom(solo){
+  isHost=true; myPeer="me";
+  app.innerHTML=`<div class="card waitcard enter" style="margin-top:40px"><span class="dots">Oda hazırlanıyor</span></div>`;
+  if(!solo){
+    try{
+      for(let i=0;i<6;i++){ code=String(1000+Math.floor(Math.random()*9000)); const s=await db.ref("rooms/"+code+"/state").get(); if(!s.exists()) break; }
+      roomRef=db.ref("rooms/"+code); myPeer="h"+rid()+rid();
+      myRef=roomRef.child("players/"+myPeer);
+      await myRef.set({n:me.n,a:me.a}); myRef.onDisconnect().remove();
+      roomRef.child("host").onDisconnect().set({on:false}); await roomRef.child("host").set({on:true});
+      roomRef.child("players").on("value",s=>hostPlayers(s.val()||{}));
+    }catch(e){ isHost=false; roomRef=null; myRef=null; joinErr="Oda açılamadı. İnternet bağlantını kontrol edip tekrar dene."; return renderHome(); }
+  } else code="solo";
+  S={v:3,gid:rid(),code,solo:!!solo,hn:me.n,phase:"lobby",set:{n:10,t:20,cat:"ALL",prank:prankArmed},qn:0,total:0,qid:0,perm:[0,1,2,3],ac:0,pc:1,sc:{},dist:null};
+  S.sc[myPeer]={n:me.n,a:me.a,s:0,st:0,r:null,prev:0,ok:0,fast:0};
+  H.present=new Set([myPeer]);
+  broadcast(); render();
+}
+function broadcast(){
+  if(!isHost||!roomRef||!S) return;
+  const st=Object.assign({},S);
+  if(S.openAt) st.openAtS=S.openAt+offset;
+  if(S.deadline) st.deadlineS=S.deadline+offset;
+  if(S.nextAt) st.nextAtS=S.nextAt+offset;
+  delete st.openAt; delete st.deadline; delete st.nextAt;
+  roomRef.child("state").set(plain(st)).catch(()=>{});
+}
+function hostPlayers(all){
+  if(!S) return;
+  const present=new Set([myPeer]); let joined=false;
+  for(const [id,pr] of Object.entries(all)){
+    if(!pr||!pr.n) continue;
+    present.add(id);
+    if(!S.sc[id]){ S.sc[id]={n:clean(pr.n),a:clean(pr.a,8)||"🙂",s:0,st:0,r:null,prev:0,ok:0,fast:0}; joined=true; }
+    else { S.sc[id].n=clean(pr.n); S.sc[id].a=clean(pr.a,8)||"🙂"; }
+    const a=pr.ans;
+    if(S.phase==="question"&&a&&a.gid===S.gid&&a.q===S.qn&&!H.ans[id]&&Number.isInteger(a.c)&&a.c>=0&&a.c<4) recordAnswer(id,a);
+  }
+  if(S.phase==="lobby") for(const id of Object.keys(S.sc)) if(!present.has(id)) delete S.sc[id];
+  H.present=present; S.pc=present.size;
+  if(joined&&S.phase==="lobby") sfx.join();
+  maybeEnd(); broadcast(); render();
+}
+function recordAnswer(id,a){
+  const now=Date.now(); if(now<S.openAt-400||S.phase!=="question") return;
+  const x2=!!a.x2&&!H.x2used[id]; if(x2) H.x2used[id]=1;
+  H.ans[id]={c:a.c,t:Math.max(now,S.openAt),x2}; S.ac=Object.keys(H.ans).length;
+}
+function maybeEnd(){ if(S.phase!=="question") return false; for(const id of H.present) if(!H.ans[id]) return false; setTimeout(endQuestion,300); return false; }
+function startGame(){
+  const withPr=!!S.set.prank; S.order=buildOrder(S.set.cat,S.set.n,withPr);
+  if(withPr){ prankArmed=false; S.set.prank=false; }
+  S.total=S.order.length; S.gid=rid(); H.x2used={};
+  for(const id in S.sc) Object.assign(S.sc[id],{s:0,st:0,r:null,prev:0,ok:0,fast:0});
+  nextQuestion(0);
+}
+function nextQuestion(i){
+  clearTimeout(H.timer);
+  S.qn=i; S.qid=S.order[i]; S.perm=shuffle([0,1,2,3]); S.phase="question"; S.dur=S.set.t; S.dist=null;
+  const now=Date.now(); S.openAt=now+PRE; S.deadline=S.openAt+S.dur*1000; delete S.nextAt; H.ans={}; S.ac=0;
+  for(const id in S.sc){ S.sc[id].r=null; S.sc[id].prev=S.sc[id].s; }
+  H.timer=setTimeout(endQuestion,PRE+S.dur*1000+400);
+  broadcast(); render();
+}
+function endQuestion(){
+  if(!S||S.phase!=="question") return;
+  clearTimeout(H.timer);
+  const dist=[0,0,0,0];
+  for(const id in S.sc){
+    const sc=S.sc[id], a=H.ans[id]; sc.prev=sc.s;
+    if(a) dist[a.c]++;
+    if(a&&a.c===0){
+      const frac=Math.max(0,Math.min(1,(S.deadline-a.t)/(S.dur*1000))), ms=a.t-S.openAt;
+      let pts=500+Math.round(500*frac); sc.st++; if(sc.st>=2) pts+=100*Math.min(sc.st-1,3); if(a.x2) pts*=2;
+      sc.s+=pts; sc.ok=(sc.ok||0)+1; if(!sc.fast||ms<sc.fast) sc.fast=ms;
+      sc.r={ok:1,pts,x2:a.x2?1:0,st:sc.st,ms};
+    } else { sc.st=0; sc.r={ok:0,pts:0,na:a?0:1}; }
+  }
+  S.dist=dist; S.phase="reveal"; S.nextAt=Date.now()+REVEAL_MS;
+  H.timer=setTimeout(advance,REVEAL_MS);
+  broadcast(); render();
+}
+function advance(){ clearTimeout(H.timer); if(S.qn+1<S.total) nextQuestion(S.qn+1); else { S.phase="final"; delete S.nextAt; broadcast(); render(); } }
+function backToLobby(){ clearTimeout(H.timer); S.phase="lobby"; S.gid=rid(); delete S.openAt; delete S.deadline; delete S.nextAt; for(const id in S.sc) Object.assign(S.sc[id],{s:0,st:0,r:null,prev:0,ok:0,fast:0}); broadcast(); render(); }
+
+// ================= OYUNCU =================
+async function joinRoom(c){
+  c=String(c||"").replace(/\D/g,"");
+  if(c.length!==4){ joinErr="Oda kodu 4 haneli olmalı."; return renderHome(); }
+  isHost=false; code=c; S=null;
+  app.innerHTML=`<div class="card waitcard enter" style="margin-top:40px"><span class="dots">Odaya bağlanılıyor</span></div>`;
+  try{
+    roomRef=db.ref("rooms/"+code);
+    const s=await roomRef.child("state").get();
+    if(!s.exists()){ roomRef=null; joinErr="Bu kodla açık oda bulunamadı. Kodu kontrol et."; return renderHome(); }
+    myPeer="p"+rid()+rid(); myRef=roomRef.child("players/"+myPeer);
+    await myRef.set({n:me.n,a:me.a}); myRef.onDisconnect().remove();
+  }catch(e){ roomRef=null; myRef=null; joinErr="Odaya bağlanılamadı. İnternet bağlantını kontrol et."; return renderHome(); }
+  view="game";
+  roomRef.child("state").on("value",s=>{ const d=s.val(); if(!roomRef) return;
+    if(!d){ leaveRoom(); joinErr="Oda sahibi odayı kapattı."; return renderHome(); }
+    if(d.v===3) applyState(d); });
+  roomRef.child("host/on").on("value",s=>{ hostOn=s.val()!==false; if(view==="game"&&S&&S.phase!=="final") banner(hostOn?"":"Oda sahibinin bağlantısı koptu, bekleniyor…"); });
+}
+function applyState(d){
+  if(d.openAtS) d.openAt=d.openAtS-offset;
+  if(d.deadlineS) d.deadline=d.deadlineS-offset;
+  if(d.nextAtS) d.nextAt=d.nextAtS-offset;
+  d.sc=d.sc||{}; d.perm=d.perm||[0,1,2,3]; d.set=d.set||{n:10,t:20,cat:"ALL"};
+  for(const id in d.sc){ const v=d.sc[id]; v.r=v.r||null; }
+  if(!S||S.gid!==d.gid){ L.used5050=false; L.usedX2=false; }
+  S=d; render();
+}
+function leaveRoom(){
+  clearTimeout(H.timer); banner("");
+  try{
+    if(roomRef){ roomRef.child("state").off(); roomRef.child("players").off(); roomRef.child("host/on").off(); }
+    if(isHost&&roomRef){ roomRef.child("host").onDisconnect().cancel(); roomRef.remove().catch(()=>{}); }
+    else if(myRef){ myRef.onDisconnect().cancel(); myRef.remove().catch(()=>{}); }
+  }catch(e){}
+  roomRef=null; myRef=null; S=null; isHost=false; view="home";
+}
+
+// ================= CEVAP =================
+function pick(bi){
+  if(!S||S.phase!=="question"||L.pick!==null) return;
+  const now=Date.now(); if(now<S.openAt||now>S.deadline) return;
+  L.pick=bi; const x2=L.x2; if(x2){L.usedX2=true;L.x2=false}
+  sfx.tap(); buzz(25);
+  const a={gid:S.gid,q:S.qn,c:bi,x2};
+  if(isHost){ if(!H.ans[myPeer]) recordAnswer(myPeer,a); maybeEnd(); broadcast(); }
+  else if(myRef) myRef.update({ans:a}).catch(()=>{});
+  // sadece seçenekleri güncelle (yeniden çizmeden)
+  app.querySelectorAll(".opt").forEach(b=>{b.disabled=true; b.classList.add(+b.dataset.b===bi?"pick":"dim")});
+  const f=$("foot"); if(f) f.innerHTML=lockedHTML();
+}
+function use5050(){ if(L.used5050||L.pick!==null) return; L.used5050=true; L.hide=shuffle([1,2,3]).slice(0,2); sfx.tap();
+  app.querySelectorAll(".opt").forEach(b=>{ if(L.hide.includes(+b.dataset.b)) b.classList.add("hide") }); const j=$("j5"); if(j) j.disabled=true; }
+function toggleX2(){ if(L.usedX2||L.pick!==null) return; L.x2=!L.x2; sfx.tap(); const j=$("j2"); if(j){ j.classList.toggle("armed",L.x2); j.textContent=L.x2?"⚡ 2x hazır!":"⚡ 2x puan"; } }
+function lockedHTML(){ return `<div class="wait"><span class="locked">✓ Cevabın kilitlendi${L.usedX2&&L.x2used===S.qn?" • ⚡2x":""}</span><div style="margin-top:8px" id="ac">${S.solo?"":`${S.ac||0}/${S.pc||1} kişi cevapladı`}</div></div>`; }
+function jokerHTML(){ return `<div class="jok"><button class="jk" id="j5" ${L.used5050?"disabled":""}>✂️ 50:50</button><button class="jk ${L.x2?"armed":""}" id="j2" ${L.usedX2?"disabled":""}>${L.x2?"⚡ 2x hazır!":"⚡ 2x puan"}</button></div>${S.solo?"":`<div class="wait" id="ac">${S.ac||0}/${S.pc||1} kişi cevapladı</div>`}`; }
+
+// ================= ÇİZİM (oda/tekli) =================
+function myScore(){ return (S&&S.sc&&S.sc[myPeer])||{s:0,st:0,r:null,ok:0}; }
+function ranked(){ return Object.entries(S.sc).map(([id,v])=>({id,...v})).sort((a,b)=>b.s-a.s); }
+function lbHTML(anim){
+  const now=ranked(), prevRank={};
+  [...now].sort((a,b)=>(b.prev||0)-(a.prev||0)).forEach((p,i)=>prevRank[p.id]=i);
+  return `<ul class="lb">${now.map((p,i)=>{const from=anim?(prevRank[p.id]-i)*52:0;
+    return `<li class="${p.id===myPeer?"me":""} ${anim&&from?"mv":""}" style="--from:${from}px"><span class="rk">${i===0?"👑":i+1}</span><span class="e">${esc(p.a)}</span><span class="n">${esc(p.n)}${p.id===myPeer?" (sen)":""}</span>${anim&&p.r&&p.r.pts?`<span class="d">+${p.r.pts}</span>`:""}<span class="p" data-from="${anim?(p.prev||0):p.s}" data-to="${p.s}">${anim?(p.prev||0):p.s}</span></li>`}).join("")}</ul>`;
+}
+function countUp(){
+  app.querySelectorAll("[data-to]").forEach(el=>{
+    const a=+el.dataset.from, b=+el.dataset.to; if(a===b){el.textContent=b;return}
+    const t0=performance.now()+500, d=900;
+    const step=t=>{ const k=Math.max(0,Math.min(1,(t-t0)/d)), e=1-Math.pow(1-k,3); el.textContent=Math.round(a+(b-a)*e); if(k<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+}
+function render(){
+  if(!S) return; view="game";
+  const key=[S.phase,S.gid,S.qn,Object.keys(S.sc).length,JSON.stringify(S.set)].join("|");
+  if(key!==renderKey){ renderKey=key; phaseFx(); draw(); }
+  else { const ac=$("ac"); if(ac&&!S.solo) ac.textContent=`${S.ac||0}/${S.pc||1} kişi cevapladı`; }
+}
+function phaseFx(){
+  const k=S.phase+S.gid+S.qn; if(k===lastPhase) return; lastPhase=k;
+  if(S.phase==="reveal"){ const r=myScore().r; if(r&&r.ok){ sfx.ok(); flash("ok"); buzz(40);} else { sfx.bad(); flash("bad"); buzz([60,40,60]); } }
+}
+function draw(){
+  cancelAnimationFrame(raf);
+  if(S.phase==="lobby") return drawLobby();
+  if(S.phase==="question") return drawQuestion();
+  if(S.phase==="reveal") return drawReveal();
+  if(S.phase==="final") return drawFinal();
+}
+function drawLobby(){
+  L.qn=-1; L.pick=null; L.hide=[]; L.x2=false;
+  const players=Object.values(S.sc), set=S.set;
+  app.innerHTML=`<div class="enter">
+  <div class="topbar"><button class="icon" id="bx">←</button><b>${S.solo?"🙋 Tekli Mod":"👥 Oda"}</b><button class="icon" id="snd">${SND.on?"🔊":"🔇"}</button></div>
+  ${S.solo?"":`<div class="card codebox"><label>Oda kodu</label><div class="code">${esc(S.code)}</div><button class="copy" id="cp">📋 Kodu kopyala</button><div class="sub" style="margin:8px 0 0">Arkadaşların bu sayfayı açıp kodu girsin.</div></div>
+  <div class="card"><label>Oyuncular • ${players.length}</label><div class="plist">${players.map(p=>`<div class="pl"><span class="e">${esc(p.a)}</span>${esc(p.n)}</div>`).join("")}</div></div>`}
+  ${isHost?`<div class="card">${settingsHTML(set,true)}<button class="btn" id="bs">▶ ${S.solo?"Başla":"Oyunu Başlat"}</button></div>`
+  :`<div class="card waitcard"><div style="font-size:34px">⏳</div><span class="dots">${esc(S.hn||"Oda sahibi")} oyunu başlatınca sorular gelecek</span><div class="sub" style="margin:8px 0 0">${(CATS.find(c=>c[0]===set.cat)||["",""])[1]} • ${set.n} soru • ${set.t} sn</div></div>`}
+  </div>`;
+  $("bx").onclick=()=>{leaveRoom();renderHome()};
+  $("snd").onclick=()=>{SND.on=!SND.on;store("by_snd",SND.on?"1":"0");$("snd").textContent=SND.on?"🔊":"🔇"};
+  const cp=$("cp"); if(cp) cp.onclick=()=>{ try{navigator.clipboard.writeText(S.code).then(()=>cp.textContent="✓ Kopyalandı",()=>{})}catch(e){} };
+  if(isHost){ bindSettings(S.set,()=>{broadcast();renderKey="";render()}); $("bs").onclick=()=>{sfx.go();startGame()}; }
+}
+function drawQuestion(){
+  if(L.qn!==S.qn||L.gid!==S.gid){ L.qn=S.qn; L.gid=S.gid; L.pick=null; L.hide=[]; L.x2=false; L.opened=false; L.lastSec=null; L.lastPre=null; L.expired=false; }
+  const q=Q[S.qid], ms=myScore(), answered=L.pick!==null, open=Date.now()>=S.openAt;
+  app.innerHTML=`<div class="enter">
+  <div class="hud"><div class="pill2">${S.qn+1}<small> / ${S.total}</small></div><div class="tag t-${q.p}">${PROV[q.p]}</div><div class="pill2 gold">⭐ ${ms.s}${ms.st>=2?` <span class="fire">🔥${ms.st}</span>`:""}</div></div>
+  <div class="qcard"><div class="qtext">${esc(q.q)}</div><div class="ringbox" id="rb"><svg viewBox="0 0 44 44" class="ring"><circle cx="22" cy="22" r="19" class="trk"/><circle cx="22" cy="22" r="19" class="prog" id="rg"/></svg><b id="ts">${S.dur}</b></div></div>
+  <div class="optzone"><div class="opts ${open?"live":""}" id="opts">${S.perm.map((bi,pos)=>`<button class="opt o${pos} ${L.hide.includes(bi)?"hide":""} ${answered?(L.pick===bi?"pick":"dim"):""}" data-b="${bi}" ${answered?"disabled":""} style="--d:${pos*70}ms"><span class="lt">${LET[pos]}</span><span class="ot">${esc(q.o[bi])}</span></button>`).join("")}</div>
+  <div class="pre ${open?"gone":""}" id="pre"><div class="pn" id="pn">3</div><div class="pl2">Hazır ol</div></div></div>
+  <div id="foot">${answered?lockedHTML():jokerHTML()}</div></div>`;
+  app.querySelectorAll(".opt").forEach(b=>b.addEventListener("pointerdown",e=>{e.preventDefault();pick(+b.dataset.b)}));
+  const j5=$("j5"); if(j5) j5.onclick=use5050; const j2=$("j2"); if(j2) j2.onclick=toggleX2;
+  L.opened=open;
+  const rg=$("rg"), ts=$("ts"), rb=$("rb"), pn=$("pn"), pre=$("pre"), opts=$("opts"), C=119.4;
+  const tick=()=>{
+    if(!S||S.phase!=="question"||view!=="game") return;
+    const now=Date.now();
+    if(now<S.openAt){
+      const n=Math.ceil((S.openAt-now)/1000);
+      if(n!==L.lastPre){ L.lastPre=n; pn.textContent=n; pn.classList.remove("pop"); void pn.offsetWidth; pn.classList.add("pop"); sfx.count(); }
+    } else {
+      if(!L.opened){ L.opened=true; pre.classList.add("gone"); opts.classList.add("live"); sfx.go(); buzz(30); }
+      const left=Math.max(0,S.deadline-now), frac=left/(S.dur*1000), sec=Math.ceil(left/1000);
+      rg.style.strokeDashoffset=C*(1-frac); ts.textContent=sec; rb.classList.toggle("warn",sec<=5);
+      if(sec!==L.lastSec){ L.lastSec=sec; if(sec<=5&&sec>0&&L.pick===null) sfx.tick(); }
+      if(left<=0&&L.pick===null&&!L.expired){ L.expired=true; app.querySelectorAll(".opt").forEach(b=>{b.disabled=true;b.classList.add("dim")}); const f=$("foot"); if(f) f.innerHTML=`<div class="wait">⏰ Süre doldu</div>`; }
+    }
+    raf=requestAnimationFrame(tick);
+  };
+  tick();
+}
+function drawReveal(){
+  const q=Q[S.qid], ms=myScore(), r=ms.r, tot=Math.max(1,S.pc||1), prank=q.p==="X";
+  let res;
+  if(r&&r.ok) res=`<div class="res ok"><span class="pts">+${r.pts}</span><small>${prank?"Tebrikler, uyanıksın! 😎":"Doğru!"} ${r.x2?"⚡ 2x joker işe yaradı. ":""}${r.st>=2?`🔥 ${r.st} doğru üst üste`:""}${r.ms!=null?` • ${fmtS(r.ms)}`:""}</small></div>`;
+  else if(r&&r.na) res=`<div class="res bad">⏰ Süre doldu<small>Bu soruda puan yok</small></div>`;
+  else res=`<div class="res bad">${prank?"😂 Kandın!":"Yanlış!"}<small>${prank?"Cevap sorunun içindeydi":"Seri sıfırlandı"}</small></div>`;
+  app.innerHTML=`<div class="enter">
+  <div class="hud"><div class="pill2">${S.qn+1}<small> / ${S.total}</small></div><div class="tag t-${q.p}">${PROV[q.p]}</div><div class="pill2 gold">⭐ <span data-from="${ms.prev||0}" data-to="${ms.s}">${ms.prev||0}</span></div></div>
+  ${res}
+  <div class="card" style="margin-top:0"><div class="qtext" style="font-size:16.5px;margin-bottom:8px">${esc(q.q)}</div>
+  ${S.perm.map((bi,pos)=>`<div class="ropt ${bi===0?"right":""} ${L.pick===bi?"mine":""}">${S.dist&&!S.solo?`<i class="fill" style="--w:${S.dist[bi]/tot*100}%"></i>`:""}<span class="lt">${bi===0?"✓":LET[pos]}</span><span class="ot">${esc(q.o[bi])}</span>${S.dist&&!S.solo?`<span class="cnt">${S.dist[bi]} 👤</span>`:""}</div>`).join("")}
+  <p class="exp">💡 ${esc(q.e)}</p></div>
+  ${S.solo?"":`<div class="card"><div class="lbh"><label>Sıralama</label></div>${lbHTML(true)}</div>`}
+  <div class="nxbar"><i id="nb"></i></div><div class="wait" style="margin-top:4px" id="nx"></div>
+  ${isHost?`<button class="btn sec" id="bn">${S.qn+1<S.total?"Sonraki soru ⏭":"Sonuçları göster 🏁"}</button>`:""}</div>`;
+  if(isHost) $("bn").onclick=()=>{sfx.tap();advance()};
+  countUp();
+  const nx=$("nx"), nb=$("nb");
+  const tick=()=>{ if(!S||S.phase!=="reveal") return; const left=Math.max(0,S.nextAt-Date.now()); nb.style.transform=`scaleX(${left/REVEAL_MS})`; nx.textContent=S.qn+1<S.total?`Sonraki soru ${Math.ceil(left/1000)} sn içinde`:`Sonuçlar ${Math.ceil(left/1000)} sn içinde`; raf=requestAnimationFrame(tick); };
+  tick();
+}
+function drawFinal(){
+  const r=ranked(), top=r.slice(0,3), myRank=r.findIndex(p=>p.id===myPeer)+1, mine=myScore();
+  const pd=(p,cls,num)=>p?`<div class="pd ${cls}"><div class="e">${esc(p.a)}</div><div class="n">${esc(p.n)}</div><div class="s">${p.s}</div><div class="b">${num}</div></div>`:`<div class="pd"></div>`;
+  const fastest=r.filter(p=>p.fast).sort((a,b)=>a.fast-b.fast)[0];
+  const sharp=[...r].sort((a,b)=>(b.ok||0)-(a.ok||0))[0];
+  app.innerHTML=`<div class="enter">
+  <h1 class="hero" style="text-align:center;font-size:34px;margin-top:10px">${S.solo?"🏁 Bitti!":myRank===1?"👑 Şampiyon sensin!":"🏁 Oyun bitti!"}</h1>
+  <p class="sub" style="text-align:center">${S.solo?`${S.total} sorudan ${mine.ok||0} doğru • ${mine.s} puan`:`${myRank}. oldun • ${mine.s} puan • ${mine.ok||0}/${S.total} doğru`}</p>
+  ${S.solo?"":`<div class="podium">${pd(top[1],"p2",2)}${pd(top[0],"p1",1)}${pd(top[2],"p3",3)}</div>`}
+  <div class="stats">
+    <div class="stat"><b>${mine.ok||0}/${S.total}</b><small>Doğru cevabın</small></div>
+    <div class="stat"><b>${mine.fast?fmtS(mine.fast):"–"}</b><small>En hızlı doğrun</small></div>
+    ${S.solo?"":`<div class="stat"><b>${fastest?esc(fastest.a)+" "+fmtS(fastest.fast):"–"}</b><small>Odanın en hızlısı</small></div>
+    <div class="stat"><b>${sharp?esc(sharp.a)+" "+(sharp.ok||0):"–"}</b><small>En çok doğru</small></div>`}
+  </div>
+  ${S.solo?"":`<div class="card">${lbHTML(false)}</div>`}
+  ${isHost?`<button class="btn" id="ba">🔁 ${S.solo?"Tekrar oyna":"Aynı odayla yeni oyun"}</button>`:`<div class="wait">Oda sahibi yeni oyun başlatabilir.</div>`}
+  <button class="btn sec" id="bh">Ana menü</button></div>`;
+  if(isHost) $("ba").onclick=()=>{sfx.tap();backToLobby()};
+  $("bh").onclick=()=>{leaveRoom();renderHome()};
+  if(S.solo||myRank===1){ sfx.win(); confetti(); } else sfx.lose();
+}
+function confetti(){
+  const c=$("conf"); c.innerHTML="";
+  const cols=["#ffd75e","#ff6a7d","#5a95ff","#35d896","#ffbf3f","#ff7aa8","#fff"];
+  for(let i=0;i<110;i++){const e=document.createElement("i");e.style.left=Math.random()*100+"vw";e.style.background=cols[i%cols.length];e.style.animationDuration=(2+Math.random()*2.8)+"s";e.style.animationDelay=Math.random()*1.4+"s";e.style.width=(6+Math.random()*6)+"px";c.appendChild(e)}
+  setTimeout(()=>c.innerHTML="",6500);
+}
+
+// ================= EŞLİ MOD (tek telefonda düello) =================
+function duelSetup(){
+  view="duelsetup"; cancelAnimationFrame(raf);
+  if(!DP[0].n) DP[0].n=me.n||"Oyuncu 1"; if(!DP[0].a) DP[0].a=me.a;
+  if(DP[1].a===DP[0].a) DP[1].a=AV.find(a=>a!==DP[0].a);
+  const avRow=pi=>`<div class="avs">${AV.map(a=>`<div class="av ${a===DP[pi].a?"on":""}" data-p="${pi}" data-a="${a}">${a}</div>`).join("")}</div>`;
+  app.innerHTML=`<div class="enter">
+  <div class="topbar"><button class="icon" id="bx">←</button><b>⚔️ Eşli Mod</b><span style="width:40px"></span></div>
+  <p class="sub">Telefonu masaya koyun, karşılıklı oturun. Ekranın üst yarısı karşıdaki oyuncuya döner. İkiniz aynı soruyu aynı anda cevaplarsınız; doğru ve hızlı olan daha çok puan alır.</p>
+  <div class="card" style="border-color:rgba(90,149,255,.5)"><label>🔵 1. oyuncu (alt taraf)</label><input id="n1" maxlength="14" value="${esc(DP[0].n)}"><div style="height:10px"></div>${avRow(0)}</div>
+  <div class="card" style="border-color:rgba(255,106,125,.5)"><label>🔴 2. oyuncu (üst taraf)</label><input id="n2" maxlength="14" value="${esc(DP[1].n)}"><div style="height:10px"></div>${avRow(1)}</div>
+  <div class="card">${settingsHTML(DSET,true)}</div>
+  <button class="btn" id="go">⚔️ Düelloyu Başlat</button></div>`;
+  const keep=()=>{ DP[0].n=clean($("n1").value)||"Oyuncu 1"; DP[1].n=clean($("n2").value)||"Oyuncu 2"; };
+  app.querySelectorAll(".av").forEach(el=>el.onclick=()=>{ sfx.tap(); keep(); DP[+el.dataset.p].a=el.dataset.a; duelSetup(); });
+  bindSettings(DSET,()=>{keep();duelSetup()});
+  $("bx").onclick=()=>{keep();renderHome()};
+  $("go").onclick=()=>{ keep(); sfx.go(); duelStart(); };
+}
+function duelStart(){
+  const withPr=!!DSET.prank; const order=buildOrder(DSET.cat,DSET.n,withPr);
+  if(withPr){ prankArmed=false; DSET.prank=false; }
+  DU={order,qn:-1,ps:DP.map(p=>({n:p.n,a:p.a,s:0,st:0,ok:0,prev:0,ans:null,r:null})),timer:null};
+  view="duel"; duelNext();
+}
+function duelNext(){
+  clearTimeout(DU.timer); DU.qn++;
+  if(DU.qn>=DU.order.length) return duelFinal();
+  DU.qid=DU.order[DU.qn]; DU.perm=shuffle([0,1,2,3]); DU.phase="q"; DU.dur=DSET.t;
+  const now=Date.now(); DU.openAt=now+PRE; DU.deadline=DU.openAt+DU.dur*1000; DU.opened=false; DU.lastPre=null; DU.lastSec=null;
+  DU.ps.forEach(p=>{p.ans=null;p.r=null;p.prev=p.s});
+  DU.timer=setTimeout(duelEnd,PRE+DU.dur*1000+200);
+  drawDuel();
+}
+function duelPick(pi,bi){
+  if(!DU||DU.phase!=="q") return; const p=DU.ps[pi], now=Date.now();
+  if(p.ans||now<DU.openAt||now>DU.deadline) return;
+  p.ans={c:bi,t:now}; sfx.tap(); buzz(20);
+  const h=$("h"+pi); h.querySelectorAll(".opt").forEach(b=>{b.disabled=true;b.classList.add(+b.dataset.b===bi?"pick":"dim")});
+  const st=h.querySelector(".dstate"); if(st) st.innerHTML=`<span class="locked">✓ Kilitlendi</span>`;
+  if(DU.ps.every(x=>x.ans)) setTimeout(duelEnd,350);
+}
+function duelEnd(){
+  if(!DU||DU.phase!=="q") return; clearTimeout(DU.timer);
+  let any=false;
+  DU.ps.forEach(p=>{ const a=p.ans;
+    if(a&&a.c===0){ const frac=Math.max(0,Math.min(1,(DU.deadline-a.t)/(DU.dur*1000))); let pts=500+Math.round(500*frac); p.st++; if(p.st>=2) pts+=100*Math.min(p.st-1,3); p.s+=pts; p.ok++; p.r={ok:1,pts,ms:a.t-DU.openAt}; any=true; }
+    else { p.st=0; p.r={ok:0,na:!a}; } });
+  DU.phase="r"; DU.nextAt=Date.now()+DUEL_REVEAL; DU.timer=setTimeout(duelNext,DUEL_REVEAL);
+  any?sfx.ok():sfx.bad(); drawDuel();
+}
+function duelFinal(){ DU.phase="f"; drawDuel(); const [a,b]=DU.ps; if(a.s!==b.s){ sfx.win(); confetti(); } else sfx.join(); }
+function halfHTML(pi){
+  const p=DU.ps[pi], o=DU.ps[1-pi];
+  if(DU.phase==="f"){ const win=p.s>o.s, tie=p.s===o.s;
+    return `<div class="hf-final"><div style="font-size:54px">${esc(p.a)}</div><div class="big">${tie?"🤝 Berabere!":win?"🏆 Kazandın!":"😅 Kaybettin"}</div>
+    <div class="fs">${esc(p.n)}: <b style="color:var(--gold)">${p.s}</b> &nbsp;•&nbsp; ${esc(o.n)}: <b>${o.s}</b></div><div class="mut">✅ ${p.ok}/${DU.order.length} doğru</div>
+    <div class="row"><button class="btn" data-act="again">🔁 Rövanş</button><button class="btn sec" data-act="menu">Menü</button></div></div>`; }
+  const q=Q[DU.qid], open=Date.now()>=DU.openAt, rev=DU.phase==="r";
+  const opts=DU.perm.map((bi,pos)=>{ let cls=""; if(rev) cls=bi===0?"right":"wrong"; else if(p.ans) cls=p.ans.c===bi?"pick":"dim";
+    return `<button class="opt o${pos} ${cls}" data-p="${pi}" data-b="${bi}" ${p.ans||rev?"disabled":""}><span class="lt">${rev&&bi===0?"✓":LET[pos]}</span><span class="ot">${esc(q.o[bi])}</span></button>`; }).join("");
+  let state="";
+  if(rev){ const r=p.r; state=`<div class="dres"><span class="r ${r.ok?"ok":"bad"}">${r.ok?`✓ +${r.pts}${p.st>=2?" 🔥"+p.st:""}`:r.na?"⏰ Süre doldu":(q.p==="X"?"😂 Kandın!":"✗ Yanlış")}</span><button class="dbtn" data-act="next">Sonraki ▶</button></div><div class="dexp">💡 ${esc(q.e)}</div>`; }
+  else state=p.ans?`<span class="locked">✓ Kilitlendi</span>`:"";
+  return `<div class="hh"><span class="who">${esc(p.a)} ${esc(p.n)}</span><span class="sc">⭐ ${p.s}${!rev&&p.st>=2?" 🔥"+p.st:""}</span></div>
+  <div class="hq"><span class="mut" style="font-size:12px">${DU.qn+1}/${DU.order.length} • ${PROV[q.p]}</span><br>${esc(q.q)}</div>
+  <div class="dopts">${opts}</div><div class="dstate">${state}</div>
+  ${rev?"":`<div class="dpre ${open?"gone":""}"><div class="pn">3</div><div class="pl2">Hazır ol</div></div>`}`;
+}
+function drawDuel(){
+  cancelAnimationFrame(raf);
+  app.innerHTML=`<div class="duel"><div class="half top p1" id="h1">${halfHTML(1)}</div><div class="mid"><i id="dbar"></i><span id="dsec"></span></div><div class="half p0" id="h0">${halfHTML(0)}</div></div>`;
+  app.querySelectorAll(".dopts .opt").forEach(b=>b.addEventListener("pointerdown",e=>{e.preventDefault();duelPick(+b.dataset.p,+b.dataset.b)}));
+  app.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{ sfx.tap(); const a=b.dataset.act;
+    if(a==="next"){ if(DU.phase==="r"){ clearTimeout(DU.timer); duelNext(); } }
+    else if(a==="again") duelStart(); else if(a==="menu"){ DU=null; renderHome(); } });
+  const bar=$("dbar"), sec=$("dsec");
+  if(DU.phase==="f"){ bar.style.transform="scaleX(0)"; sec.textContent="⚔️"; return; }
+  const tick=()=>{
+    if(!DU||view!=="duel") return; const now=Date.now();
+    if(DU.phase==="q"){
+      if(now<DU.openAt){ const n=Math.ceil((DU.openAt-now)/1000); if(n!==DU.lastPre){ DU.lastPre=n; app.querySelectorAll(".dpre .pn").forEach(pn=>{pn.textContent=n;pn.classList.remove("pop");void pn.offsetWidth;pn.classList.add("pop")}); sfx.count(); } sec.textContent="Hazır ol"; bar.style.transform="scaleX(1)"; }
+      else { if(!DU.opened){ DU.opened=true; app.querySelectorAll(".dpre").forEach(d=>d.classList.add("gone")); sfx.go(); buzz(30); }
+        const left=Math.max(0,DU.deadline-now), s=Math.ceil(left/1000); bar.style.transform=`scaleX(${left/(DU.dur*1000)})`; sec.textContent=s+" sn";
+        if(s!==DU.lastSec){ DU.lastSec=s; if(s<=5&&s>0) sfx.tick(); } }
+    } else if(DU.phase==="r"){ const left=Math.max(0,DU.nextAt-now); bar.style.transform=`scaleX(${left/DUEL_REVEAL})`; sec.textContent=`Sonraki ${Math.ceil(left/1000)} sn`; }
+    raf=requestAnimationFrame(tick);
+  };
+  tick();
+}
+
+renderHome();
+</script>
+</body>
+</html>
